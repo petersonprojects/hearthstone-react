@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
-import SingleCard from './SingleCard'
+import SingleCard from './SingleCard';
+import { Row, Container } from 'react-bootstrap';
+import './Cards.css';
 // import { useDispatch, useSelector } from 'react-redux'
 // import counterAction from '../actions/countActions';
 
@@ -36,18 +38,39 @@ const Cards = () => {
     }, [])
 
     let JSX = cards.map(card => {
-        return <SingleCard card={card}/>
+        if(card.cardTypeId !== 3)
+        {
+            return <SingleCard key={card.slug} card={card}/>
+        }
+        else{
+            return null;
+        }
+
     })
 
     return (
         <>
-            Total cards:  {data.cardCount}
-            <br/>
-            {JSX}
-            <br/>
-            {/* {data.cards[0].name} */}
-            {/* {count} */}
-            {/* <button onClick={()=> dispatch(counterAction())}>+</button> */}
+
+            <Container>
+
+            <Row className="justify-content-center">
+                <h1 id="cardsHeader" className="mb-0 mt-5">Search from {data.cardCount} cards</h1>
+            </Row>
+
+ 
+
+                <br/>
+            <Row>
+                {JSX}
+            </Row>
+
+                <br/>
+                {/* {data.cards[0].name} */}
+                {/* {count} */}
+                {/* <button onClick={()=> dispatch(counterAction())}>+</button> */}
+
+            </Container>
+
         </>
     )
 }

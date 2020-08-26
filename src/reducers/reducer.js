@@ -2,7 +2,9 @@
 // can I make the cards api call here?
 
 const initialState = {
-    counter: 0
+    counter: 0,
+    data: [],
+    cards: []
 }
 
 const reducer = (state = initialState, action) => {

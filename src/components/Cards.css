@@ -1,0 +1,35 @@
+
+/* font-size response */
+
+@media (max-width: 288px)
+{
+    html { font-size:0.4em; }
+}
+
+@media (min-width: 289px) and (max-width: 414px)
+{
+    html { font-size:0.6em; }
+}
+
+@media (min-width: 415px) and (max-width: 991px)
+{
+    html { font-size:1.2em; }
+}
+
+@media (min-width: 992px) and (max-width: 1300px)
+{ 
+    html {font-size:1.5em;}
+}
+
+@media (min-width: 1300px) and (max-width: 2000px){  
+    html {font-size:2.0em;}    
+}
+
+@font-face{
+    font-family: "Belwe";
+    src: url("./layout/Belwe.ttf") format("truetype");
+}
+
+#cardsHeader{
+    font-family: "Belwe";
+}
