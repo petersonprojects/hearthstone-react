@@ -3,20 +3,21 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Cards from './components/Cards';
 // import { createStore } from 'redux';
-import { Provider } from 'react-redux';
-// import combinedReducer from './reducers/combinedReducer';
+// import { Provider } from 'react-redux';
+// import reducer from './reducers/reducer';
 import {
   BrowserRouter as Router,
   Route,
   Switch
 } from 'react-router-dom';
-// import Cards from './components/Cards';
+
 import BaseLayout from './components/layout/BaseLayout';
 
-// let store = createStore(combinedReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+// let store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
 
+  // <Provider>
     <Router>
       <BaseLayout>
         <Switch>
@@ -28,7 +29,7 @@ ReactDOM.render(
 
         </Switch>
       </BaseLayout>
-    </Router>
-,
+    </Router>,
+  // </Provider>
   document.getElementById('root')
 );
