@@ -26,7 +26,6 @@ const Cards = () => {
             let data = await response.json();
 
             setData(data)
-
             setCards(data.cards)
 
         }
@@ -37,11 +36,8 @@ const Cards = () => {
     }, [])
 
     let JSX = cards.map(card => {
-
         return <SingleCard card={card}/>
-
     })
-
 
     return (
         <>
