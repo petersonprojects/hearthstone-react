@@ -1,6 +1,5 @@
 
 /* font-size response */
-
 @media (max-width: 288px)
 {
     html { font-size:0.4em; }
@@ -32,4 +31,17 @@
 
 #cardsHeader{
     font-family: "Belwe";
+}
+
+img{
+    height:310px;
+    width:260px;
+    transition-duration: 0.5s;
+}
+
+img:hover{
+    -webkit-transform: scale(1.2);
+    transform: scale(1.2);
+    transition-duration: 0.5s;
+    cursor: pointer;
 }

@@ -7,7 +7,7 @@ const Header = () => {
     return (
         <>
             <Navbar id="headerTitle" bg="dark" expand="lg">
-                <Navbar.Brand id="headerTitle" href="/">Hearthstone React </Navbar.Brand>
+                <Navbar.Brand id="headerTitle" href="/">Hearthstone <b style={{color:'lightskyblue'}}>React</b> </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
@@ -18,7 +18,7 @@ const Header = () => {
                 </Nav>
                 <Form inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button variant="outline-primary">Search</Button>
+                    <Button id="searchButton" variant="outline-light">Search</Button>
                 </Form>
                 </Navbar.Collapse>
             </Navbar>

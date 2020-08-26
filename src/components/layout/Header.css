@@ -1,4 +1,5 @@
 /* font-size response */
+/* light background blue #cbf3f0 */
 
 @media (max-width: 288px)
 {
@@ -41,5 +42,11 @@
 
 #navLink{
     color:white;
-    margin-left: 1.5rem;
+    margin-left: 0.6rem;
+}
+
+#searchButton:hover{
+    background-color:#cbf3f0;
+    color:black;
+    border: 1px black solid;
 }
