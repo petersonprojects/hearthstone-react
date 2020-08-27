@@ -3,7 +3,6 @@
 
 const initialState = {
     counter: 0,
-    data: [],
     cards: []
 }
 

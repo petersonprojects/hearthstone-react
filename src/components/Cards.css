@@ -31,6 +31,7 @@
 
 #cardsHeader{
     font-family: "Belwe";
+    font-size: 1.5em;
 }
 
 img{
@@ -40,8 +41,8 @@ img{
 }
 
 img:hover{
-    -webkit-transform: scale(1.2);
-    transform: scale(1.2);
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
     transition-duration: 0.5s;
     cursor: pointer;
 }

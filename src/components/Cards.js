@@ -1,17 +1,21 @@
 
 import React, { useState, useEffect } from 'react';
 import SingleCard from './SingleCard';
+import Heroes from './Heroes'
 import { Row, Container, Button, Col } from 'react-bootstrap';
 import './Cards.css';
+// import Header from '../components/layout/Header'
 // import { useDispatch, useSelector } from 'react-redux'
 // import counterAction from '../actions/countActions';
 
-const Cards = () => {
+const Cards = (props) => {
 
 
     let jsx = null;
 
     const [pageCounter, setCounter] = useState(1);
+
+    const [localStart, setLocal] = useState(1);
     
     const [page, setPage] = useState(1);
     const [cardsDisplayed, setCardsDisplayed] = useState([])
@@ -73,7 +77,6 @@ const Cards = () => {
 
         let end = start + 40;
         let newPage = allCards.slice(start, end);
-        console.log(allCards);
         setCardsDisplayed(newPage);
 
         // let start = (pageCounter * 40)-40;
@@ -85,6 +88,7 @@ const Cards = () => {
 
     let handleNext = () => {
         setCounter(pageCounter + 1)
+        setLocal(localStart + 41)
 
     }
 
@@ -92,6 +96,7 @@ const Cards = () => {
 
         if(pageCounter > 1){
             setCounter(pageCounter - 1)
+            setLocal(localStart - 41)
         }
 
     }
@@ -120,7 +125,6 @@ const Cards = () => {
     // this is meant to keep the jsx from rendering until all of the pages are loaded
         if(page >= 15)
         {
-            console.log(cardsDisplayed)
             jsx = cardsDisplayed.map(card => {
 
                 if(card.cardTypeId !== 3)
@@ -135,10 +139,20 @@ const Cards = () => {
         }
         else{
             // ....loading jsx
+            jsx = <><h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>
+                        <div>
+                            <img src="./loading.gif" style={{height:'30px', display:'block'}}></img>
+                        </div></>
         }
 
-
-
+    // let localStart;
+    // if(pageCounter === 1)
+    // {
+    //     localStart = 1
+    // }
+    // else{
+    //     localStart = (pageCounter * 40)-40;
+    // }
 
     return (
         <>
@@ -146,11 +160,11 @@ const Cards = () => {
             <Container>
 
             <Row className="justify-content-center">
-                <h1 id="cardsHeader" className="mb-0 mt-5">Search from {pageData} cards</h1>
+                <h1 id="cardsHeader" className="mb-0 mt-5">Showing {localStart} - {localStart + 40} of {pageData} total cards</h1>
             </Row>
 
                 <br/>
-            <Row>
+            <Row className="justify-content-center">
                 {jsx}
             </Row>
 
@@ -160,16 +174,18 @@ const Cards = () => {
                 {/* <button onClick={()=> dispatch(counterAction())}>+</button> */}
 
             <Row className="mt-0 pt-0">
+
                 <Col className="d-flex justify-content-center">
                     <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
                 </Col>
+
                 <Col className="d-flex justify-content-center">
                     <p id="pageNumber">{pageCounter}</p>
                 </Col>
+
                 <Col className="d-flex justify-content-center">
                     <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
                 </Col>
-                
 
             </Row>
 
