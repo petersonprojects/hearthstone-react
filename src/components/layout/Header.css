@@ -44,6 +44,9 @@
     color:white;
     margin-left: 0.6rem;
 }
+#navLink:hover{
+    color:#cbf3f0;
+}
 
 #searchButton:hover{
     background-color:#cbf3f0;

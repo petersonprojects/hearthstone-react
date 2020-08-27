@@ -45,3 +45,19 @@ img:hover{
     transition-duration: 0.5s;
     cursor: pointer;
 }
+
+#pageNumber{
+    font-family: "Belwe";
+    font-size: 60px;
+}
+
+#prevButton:hover{
+    background-color:#cbf3f0;
+    color:black;
+    border: 1px black solid;
+}
+#nextButton:hover{
+    background-color:#cbf3f0;
+    color:black;
+    border: 1px black solid;
+}
