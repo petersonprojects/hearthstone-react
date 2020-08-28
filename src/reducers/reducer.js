@@ -1,9 +1,10 @@
 
 // can I make the cards api call here?
 
+
 const initialState = {
-    counter: 0,
-    cards: []
+    counter: 1,
+    cards:[]
 }
 
 const reducer = (state = initialState, action) => {
@@ -15,6 +16,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 counter: state.counter + 1
+            }
+        case "LOAD_CARDS":
+            return{
+                ...state,
+                cards: action.data
             }
         default:
             return state;

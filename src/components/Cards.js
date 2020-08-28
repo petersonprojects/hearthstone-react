@@ -1,67 +1,85 @@
 
 import React, { useState, useEffect } from 'react';
 import SingleCard from './SingleCard';
-import Heroes from './Heroes'
 import { Row, Container, Button, Col } from 'react-bootstrap';
 import './Cards.css';
+// import { connect } from 'react-redux';
+// import counterAction from '../actions/countActions'
 // import Header from '../components/layout/Header'
-// import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux';
 // import counterAction from '../actions/countActions';
+import {loadCards} from '../actions/cardActions'
 
-const Cards = (props) => {
-
+const Cards = () => {
 
     let jsx = null;
+    const [load, setLoad] = useState(false);
 
     const [pageCounter, setCounter] = useState(1);
 
     const [localStart, setLocal] = useState(1);
     
     const [page, setPage] = useState(1);
-    const [cardsDisplayed, setCardsDisplayed] = useState([])
+    const [cardsDisplayed, setCardsDisplayed] = useState([]);
 
     const [pageData, setPageData] = useState(0); // this is only used for card count
 
     const [allCards, setAllCards] = useState([]);
     const [cards, setPageCards] = useState([]);
 
+    const dispatch = useDispatch();
+
     // use selector is like mapStateToProps (pull down data from global state)
+
     // useDispatch is used to update the global state
 
-    // const count = useSelector(state => state.counter);
     // const dispatch = useDispatch();
-
-    // acts like componentDidMount as a react hook
 
     useEffect(()=>{
 
         async function fetchData(){
 
-                let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USfK7xek5QNoa3fob0UELeNOELqg4ujeVH`);
+                let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USQdnYTfvxeWaIo8FcDGfHMAfDH1GtdZYW`);
                 let data = await response.json();
 
-                setPageData(data.cardCount)
-                setPageCards(data.cards)
+                setPageData(pageData => data.cardCount)
+                setPageCards(cards => data.cards)
 
                 if(page === 1)
                 {
-                    setCardsDisplayed(data.cards)
+                    setCardsDisplayed(cardsDisplayed => data.cards)
                 }
 
                 setPage(page + 1)
 
                 if(page <= 15)
                 {   
-                    setAllCards(allCards.concat(cards))
+                    setAllCards(allCards => allCards.concat(cards))
+                                        
+                    fetchData();
+                    console.log(`page ${page}`)
+                    if(page == 5)
+                    {
+                        
+                        setLoad(true);
+                    }
                 }
+                
 
         }
-    
+
         fetchData();
+
 
         console.log(allCards)
         
-    }, [allCards])
+    }, [])
+
+    useEffect(()=>{
+
+        console.log(`userEFfect-dispatch ${load}`)
+        dispatch(loadCards(allCards))
+    }, [load])
 
     useEffect(()=>{
 
@@ -79,16 +97,12 @@ const Cards = (props) => {
         let newPage = allCards.slice(start, end);
         setCardsDisplayed(newPage);
 
-        // let start = (pageCounter * 40)-40;
-        // let end = pageCounter * 40;
-        // let newPage = allCards.slice(start, end)
-        // setCardsDisplayed(newPage);
-
     }, [pageCounter])
 
     let handleNext = () => {
-        setCounter(pageCounter + 1)
-        setLocal(localStart + 41)
+
+        setCounter(pageCounter + 1);
+        setLocal(localStart + 41);
 
     }
 
@@ -100,27 +114,6 @@ const Cards = (props) => {
         }
 
     }
-
-
-
-    // useEffect(()=>{
-
-    //     async function fetchData(){
-
-    //         let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USfK7xek5QNoa3fob0UELeNOELqg4ujeVH`);
-    //         let data = await response.json();
-
-    //         setData(data)
-    //         setCards(data.cards)
-
-
-    //         console.log(data)
-
-    //     }
-    
-    //     fetchData();
-
-    // }, [page])
 
     // this is meant to keep the jsx from rendering until all of the pages are loaded
         if(page >= 15)
@@ -139,20 +132,11 @@ const Cards = (props) => {
         }
         else{
             // ....loading jsx
-            jsx = <><h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>
+            jsx = <>{/*h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>*/}
                         <div>
-                            <img src="./loading.gif" style={{height:'30px', display:'block'}}></img>
+                            <img src="./loading.gif" style={{height:'30px', display:'block'}} alt="loading"></img>
                         </div></>
         }
-
-    // let localStart;
-    // if(pageCounter === 1)
-    // {
-    //     localStart = 1
-    // }
-    // else{
-    //     localStart = (pageCounter * 40)-40;
-    // }
 
     return (
         <>
@@ -169,7 +153,7 @@ const Cards = (props) => {
             </Row>
 
                 <br/>
-                {/* {data.cards[0].name} */}
+
                 {/* {count} */}
                 {/* <button onClick={()=> dispatch(counterAction())}>+</button> */}
 

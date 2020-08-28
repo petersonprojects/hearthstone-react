@@ -1,6 +1,5 @@
 import React from 'react';
-// import { connect } from 'react-redux';
-// import counterAction from './actions/countActions'
+
 
 const App = (props) => {
   return (
