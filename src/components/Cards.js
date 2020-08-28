@@ -15,6 +15,8 @@ const Cards = () => {
     let jsx = null;
     const [load, setLoad] = useState(false);
 
+    const [cardType, setCardType] = useState(0);
+
     const [pageCounter, setCounter] = useState(1);
 
     const [localStart, setLocal] = useState(1);
@@ -42,30 +44,29 @@ const Cards = () => {
                 let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USQdnYTfvxeWaIo8FcDGfHMAfDH1GtdZYW`);
                 let data = await response.json();
 
-                setPageData(pageData => data.cardCount)
-                setPageCards(cards => data.cards)
+                setPageData(data.cardCount)
+                setPageCards(data.cards)
 
                 if(page === 1)
                 {
-                    setCardsDisplayed(cardsDisplayed => data.cards)
+                    setCardsDisplayed(data.cards)
                 }
 
                 setPage(page + 1)
 
                 if(page <= 15)
                 {   
+
                     setAllCards(allCards => allCards.concat(cards))
-                                        
-                    fetchData();
-                    console.log(`page ${page}`)
-                    if(page == 5)
+
+                    if(page == 15)
                     {
-                        
                         setLoad(true);
                     }
-                }
-                
 
+                    console.log(`page ${page}`)
+
+                }
         }
 
         fetchData();
@@ -73,7 +74,7 @@ const Cards = () => {
 
         console.log(allCards)
         
-    }, [])
+    }, [allCards])
 
     useEffect(()=>{
 
@@ -112,6 +113,30 @@ const Cards = () => {
             setCounter(pageCounter - 1)
             setLocal(localStart - 41)
         }
+
+    }
+
+    useEffect(()=>{
+
+        let filtered = allCards.filter(card => {
+
+            return card.cardTypeId === 3 && card.manaCost === 0
+    
+        })
+
+        jsx = filtered.map(card => {
+
+            return <SingleCard key={card.slug} card={card}/>
+    
+        })
+
+    }, [cardType])
+
+    
+    let handleFilter = (e) => {
+
+        setCardType(3)
+        console.log(cardType)
 
     }
 
@@ -169,6 +194,9 @@ const Cards = () => {
 
                 <Col className="d-flex justify-content-center">
                     <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
+                </Col>
+                <Col className="d-flex justify-content-center">
+                    <Button id="filtButton" className="mb-4"  variant="dark" onClick={handleFilter}>filter</Button>
                 </Col>
 
             </Row>
