@@ -45,6 +45,7 @@
     color:white;
     margin-left: 0.6rem;
     transition-duration: 0.3s;
+    font-size: 0.8em;
 }
 
 #navLink:hover{

@@ -30,8 +30,10 @@ const Heroes = (props) => {
     return (
     <>
 
+ 
+
             <Row className="justify-content-center">
-                <h1 id="cardsHeader" className="mb-0 mt-5">collectible heroes</h1>
+                <h1 id="cardsHeader" className="mb-0 mt-5">{heroes.length} Collectible Heroes</h1>
             </Row>
 
         <Row>

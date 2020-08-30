@@ -3,22 +3,19 @@ import React, { useState, useEffect } from 'react';
 import SingleCard from './SingleCard';
 import { Row, Container, Button, Col } from 'react-bootstrap';
 import './Cards.css';
-// import { connect } from 'react-redux';
-// import counterAction from '../actions/countActions'
-// import Header from '../components/layout/Header'
-import { useDispatch } from 'react-redux';
-// import counterAction from '../actions/countActions';
-import {loadCards} from '../actions/cardActions'
+import { useDispatch, useSelector } from 'react-redux';
+import {loadCards} from '../actions/cardActions';
 
 const Cards = () => {
 
     let jsx = null;
+    let title = null;
 
-    var counter = 1;
+    const cardz = useSelector(state => state.cards)
+
+    const totalPages = 68;
 
     const [load, setLoad] = useState(false);
-
-    const [cardType, setCardType] = useState(0);
 
     const [pageCounter, setCounter] = useState(1);
 
@@ -34,48 +31,6 @@ const Cards = () => {
 
     const dispatch = useDispatch();
 
-    let count = () => {
-        counter = counter + 1;
-    }
-
-    async function fetchData(){
-
-        let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${counter}&access_token=USwrKJY7SlLnqdhZm1uiYZbnretrvlOil1`);
-        let data = await response.json();
-
-        setPageData(data.cardCount);
-        setPageCards(data.cards);
-
-        if(counter === 1)
-        {
-            setCardsDisplayed(data.cards)
-        }
-
-        await count()
-
-        console.log(counter)
-
-        if(counter <= 15)
-        {   
-
-            setAllCards(allCards => allCards.concat(cards))
-
-            if(counter === 15)
-            {
-                setLoad(true);
-            }
-
-            console.log(`page ${counter}`)
-
-
-            fetchData();
-
-        }
-    }
-
-fetchData();
-
-console.log(allCards)
 
     // use selector is like mapStateToProps (pull down data from global state)
 
@@ -83,50 +38,62 @@ console.log(allCards)
 
     // const dispatch = useDispatch();
 
-    // useEffect(()=>{
+    useEffect(()=>{
 
-    //     async function fetchData(){
+        console.log(`cardz value in Cards: ${cardz}`)
 
-    //             let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USwrKJY7SlLnqdhZm1uiYZbnretrvlOil1`);
-    //             let data = await response.json();
+        async function fetchData(){
 
-    //             setPageData(data.cardCount);
-    //             setPageCards(data.cards);
+                let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USwrKJY7SlLnqdhZm1uiYZbnretrvlOil1`);
+                let data = await response.json();
 
-    //             if(page === 1)
-    //             {
-    //                 setCardsDisplayed(data.cards)
-    //             }
+                setPageData(data.cardCount);
+                setPageCards(data.cards);
 
-    //             setPage(page + 1)
+                if(page === 1)
+                {
+                    setCardsDisplayed(data.cards)
+                }
 
-    //             if(page <= 15)
-    //             {   
+                setPage(page + 1)
 
-    //                 setAllCards(allCards => allCards.concat(cards))
+                if(page <= totalPages)
+                {   
 
-    //                 if(page === 15)
-    //                 {
-    //                     setLoad(true);
-    //                 }
+                    setAllCards(allCards => allCards.concat(cards))
 
-    //                 console.log(`page ${page}`)
+                    if(page === totalPages)
+                    {
+                        setLoad(true);
+                    }
 
-    //             }
-    //     }
+                    console.log(`page ${page}`)
 
-    //     fetchData();
+                }
+        }
 
-    //     console.log(allCards)
+        if(load === false)
+        {
+            fetchData();
+        }
+
+
+        console.log(allCards)
         
-    // }, [allCards])
+    }, [allCards])
 
+
+    // when all the cards have loaded (load=true), save them to the global state
+    // in the cards: [] array
     useEffect(()=>{
 
         console.log(`userEFfect-dispatch ${load}`)
         dispatch(loadCards(allCards))
+
     }, [load])
 
+
+    // rerenders the page with specific array items when the page number is altered
     useEffect(()=>{
 
         let start;
@@ -161,16 +128,9 @@ console.log(allCards)
         }
 
     }
-    
-    let handleFilter = () => {
-
-        setCardType(3)
-        console.log(cardType)
-
-    }
 
     // this is meant to keep the jsx from rendering until all of the pages are loaded
-    if(page >= 15)
+    if(page >= totalPages)
     {
         jsx = cardsDisplayed.map(card => {
 
@@ -183,13 +143,21 @@ console.log(allCards)
             }
     
         })
+
+        title =  <Row className="justify-content-center">
+        <h1 id="cardsHeader" className="mb-0 mt-5">Showing {localStart} - {localStart + 40} of {allCards.length} total cards</h1>
+
+    </Row>
+
+
     }
     else{
         // ....loading jsx
         jsx = <>{/*h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>*/}
                     <div>
-                        <img src="./loading.gif" style={{height:'30px', display:'block'}} alt="loading"></img>
+                        <img style={{height:'200px', width:'200px'}} alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>
                     </div></>
+        title = null;
     }
 
     return (
@@ -197,9 +165,7 @@ console.log(allCards)
 
             <Container>
 
-            <Row className="justify-content-center">
-                <h1 id="cardsHeader" className="mb-0 mt-5">Showing {localStart} - {localStart + 40} of {pageData} total cards</h1>
-            </Row>
+            {title}
 
                 <br/>
             <Row className="justify-content-center">
@@ -220,9 +186,6 @@ console.log(allCards)
 
                 <Col className="d-flex justify-content-center">
                     <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
-                </Col>
-                <Col className="d-flex justify-content-center">
-                    <Button id="filtButton" className="mb-4"  variant="dark" onClick={handleFilter}>filter</Button>
                 </Col>
 
             </Row>
