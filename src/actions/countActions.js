@@ -1,10 +1,9 @@
 
 
-let counterAction = () => {
+export let counterAction = () => {
 
     return {
         type: "INCREMENT"
     }
 }
 
-export default counterAction
