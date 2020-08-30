@@ -72,10 +72,9 @@ const Cards = () => {
                 }
         }
 
-        if(load === false)
-        {
+
             fetchData();
-        }
+
 
 
         console.log(allCards)
