@@ -13,6 +13,9 @@ import {loadCards} from '../actions/cardActions'
 const Cards = () => {
 
     let jsx = null;
+
+    var counter = 1;
+
     const [load, setLoad] = useState(false);
 
     const [cardType, setCardType] = useState(0);
@@ -31,50 +34,92 @@ const Cards = () => {
 
     const dispatch = useDispatch();
 
+    let count = () => {
+        counter = counter + 1;
+    }
+
+    async function fetchData(){
+
+        let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${counter}&access_token=USwrKJY7SlLnqdhZm1uiYZbnretrvlOil1`);
+        let data = await response.json();
+
+        setPageData(data.cardCount);
+        setPageCards(data.cards);
+
+        if(counter === 1)
+        {
+            setCardsDisplayed(data.cards)
+        }
+
+        await count()
+
+        console.log(counter)
+
+        if(counter <= 15)
+        {   
+
+            setAllCards(allCards => allCards.concat(cards))
+
+            if(counter === 15)
+            {
+                setLoad(true);
+            }
+
+            console.log(`page ${counter}`)
+
+
+            fetchData();
+
+        }
+    }
+
+fetchData();
+
+console.log(allCards)
+
     // use selector is like mapStateToProps (pull down data from global state)
 
     // useDispatch is used to update the global state
 
     // const dispatch = useDispatch();
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        async function fetchData(){
+    //     async function fetchData(){
 
-                let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USQdnYTfvxeWaIo8FcDGfHMAfDH1GtdZYW`);
-                let data = await response.json();
+    //             let response = await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=USwrKJY7SlLnqdhZm1uiYZbnretrvlOil1`);
+    //             let data = await response.json();
 
-                setPageData(data.cardCount)
-                setPageCards(data.cards)
+    //             setPageData(data.cardCount);
+    //             setPageCards(data.cards);
 
-                if(page === 1)
-                {
-                    setCardsDisplayed(data.cards)
-                }
+    //             if(page === 1)
+    //             {
+    //                 setCardsDisplayed(data.cards)
+    //             }
 
-                setPage(page + 1)
+    //             setPage(page + 1)
 
-                if(page <= 15)
-                {   
+    //             if(page <= 15)
+    //             {   
 
-                    setAllCards(allCards => allCards.concat(cards))
+    //                 setAllCards(allCards => allCards.concat(cards))
 
-                    if(page == 15)
-                    {
-                        setLoad(true);
-                    }
+    //                 if(page === 15)
+    //                 {
+    //                     setLoad(true);
+    //                 }
 
-                    console.log(`page ${page}`)
+    //                 console.log(`page ${page}`)
 
-                }
-        }
+    //             }
+    //     }
 
-        fetchData();
+    //     fetchData();
 
-
-        console.log(allCards)
+    //     console.log(allCards)
         
-    }, [allCards])
+    // }, [allCards])
 
     useEffect(()=>{
 
@@ -90,7 +135,8 @@ const Cards = () => {
         {
             start = 0;
         }
-        else{
+        else
+        {
             start = (pageCounter * 40)-40;
         }
 
@@ -115,25 +161,8 @@ const Cards = () => {
         }
 
     }
-
-    useEffect(()=>{
-
-        let filtered = allCards.filter(card => {
-
-            return card.cardTypeId === 3 && card.manaCost === 0
     
-        })
-
-        jsx = filtered.map(card => {
-
-            return <SingleCard key={card.slug} card={card}/>
-    
-        })
-
-    }, [cardType])
-
-    
-    let handleFilter = (e) => {
+    let handleFilter = () => {
 
         setCardType(3)
         console.log(cardType)
@@ -141,27 +170,27 @@ const Cards = () => {
     }
 
     // this is meant to keep the jsx from rendering until all of the pages are loaded
-        if(page >= 15)
-        {
-            jsx = cardsDisplayed.map(card => {
+    if(page >= 15)
+    {
+        jsx = cardsDisplayed.map(card => {
 
-                if(card.cardTypeId !== 3)
-                {
-                    return <SingleCard key={card.slug} card={card}/>
-                }
-                else{
-                    return null;
-                }
-        
-            })
-        }
-        else{
-            // ....loading jsx
-            jsx = <>{/*h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>*/}
-                        <div>
-                            <img src="./loading.gif" style={{height:'30px', display:'block'}} alt="loading"></img>
-                        </div></>
-        }
+            if(card.cardTypeId !== 3)
+            {
+                return <SingleCard key={card.slug} card={card}/>
+            }
+            else{
+                return null;
+            }
+    
+        })
+    }
+    else{
+        // ....loading jsx
+        jsx = <>{/*h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>*/}
+                    <div>
+                        <img src="./loading.gif" style={{height:'30px', display:'block'}} alt="loading"></img>
+                    </div></>
+    }
 
     return (
         <>
@@ -178,9 +207,6 @@ const Cards = () => {
             </Row>
 
                 <br/>
-
-                {/* {count} */}
-                {/* <button onClick={()=> dispatch(counterAction())}>+</button> */}
 
             <Row className="mt-0 pt-0">
 

@@ -20,7 +20,7 @@ const Header = () => {
                 <Nav className="mr-auto verticalLine">
                     <Nav.Link id="navLink" href="/">Home</Nav.Link>
                     <Nav.Link id="navLink" href="/cards">Cards</Nav.Link>
-                    {/* <Nav.Link id="navLink" href="/heroes">Heroes</Nav.Link> */}
+                    <Nav.Link id="navLink" href="/heroes">Heroes</Nav.Link>
                 </Nav>
                 <Form inline>
                     <FormControl type="text" placeholder="Search" className="mr-sm-2" />

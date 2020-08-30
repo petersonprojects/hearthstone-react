@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import Cards from './components/Cards';
+import Heroes from './components/Heroes';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducers/reducer';
@@ -58,7 +59,7 @@ ReactDOM.render(
 
           <Route exact path='/' component={App}/>
           <Route path='/cards' component={Cards}/>
-          <Route path='/heroes' component={Cards}/>
+          <Route path='/heroes' component={Heroes}/>
 
           <Route component={App}/>
 
