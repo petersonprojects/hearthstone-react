@@ -5,38 +5,35 @@ import { Row, Container, Button, Col } from 'react-bootstrap';
 import './Cards.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {loadCards} from '../actions/cardActions';
-import {counterAction} from '../actions/countActions';
+import { counterAction } from '../actions/countActions';
 
 const Cards = () => {
 
     let jsx = null;
     let title = null;
-
     const totalPages = 68;
+
+    // array of all 2663 cards in global state
+    const reduxDeck = useSelector(state => state.cards);
+
+    const [allCards, setAllCards] = useState([]);
+
+    const [cardsDisplayed, setCardsDisplayed] = useState([]);
 
     const [load, setLoad] = useState(false);
 
+    // the counter that changes with page click
+    // the counter that displays what cards being shown in array (42-82)
+    // the counter used to load all 68 pages of cards
+
     const [pageCounter, setCounter] = useState(1);
-
     const [localStart, setLocal] = useState(1);
-    
     const [page, setPage] = useState(1);
-    const [cardsDisplayed, setCardsDisplayed] = useState([]);
-
-    const reduxDeck = useSelector(state => state.cards);
-    const [isStored, setStored] = useState(false);
-    if(reduxDeck.length > 0)
-    {
-        setStored(true)
-    }
-    
-    const [allCards, setAllCards] = useState([]);
 
     // this is used as a temp variable to concat to the allCards array
     const [cards, setPageCards] = useState([]);
 
     const dispatch = useDispatch();
-
 
     // use selector is like mapStateToProps (pull down data from global state)
 
@@ -77,11 +74,8 @@ const Cards = () => {
 
         }
 
-
         fetchData();
 
-        console.log(allCards)
-        
     }, [allCards])
 
     // when all the cards have loaded (load=true), save them to the global state
@@ -144,18 +138,17 @@ const Cards = () => {
         })
 
         title =  <Row className="justify-content-center">
-            <h1 id="cardsHeader" className="mb-0 mt-5">Showing {localStart} - {localStart + 40} of {allCards.length} total cards</h1>
-        </Row>
-
-
+                    <h1 id="cardsHeader" className="mb-0 mt-5">Showing {localStart} - {localStart + 40} of {allCards.length} total cards</h1>
+                </Row>
     }
+
     else
     {
         // ....loading jsx
         jsx = <>{/*h1 style={{fontFamily:'Belwe',fontSize:'1.5em'}}>Loading cards... </h1>*/}
-                    <div>
-                        <img style={{height:'200px', width:'200px'}} alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>
-                    </div></>
+                <div className="mt-3 mb-3">
+                    <img style={{height:'200px', width:'200px'}} alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>
+                </div></>
         title = null;
     }
 
