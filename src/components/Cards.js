@@ -10,13 +10,11 @@ const Cards = () => {
 
     let jsx = null;
     let title = null;
+    let pageJSX = null;
     // const totalPages = 68;
 
     // array of all 2663 cards in global state
     const reduxDeck = useSelector(state => state.cards);
-    const demonHunter = reduxDeck.filter(card => {
-        return card.classId === 14 && card.cardTypeId !== 3
-    })
 
     // the counter that changes with page click
     // the counter that displays what cards being shown in array (42-82)
@@ -26,6 +24,7 @@ const Cards = () => {
     const [localStart, setLocal] = useState(1);
 
     const [cards, setPageCards] = useState([]);
+    const [currentTitle, setCurrentTitle] = useState('All')
 
     const dispatch = useDispatch();
 
@@ -79,13 +78,29 @@ const Cards = () => {
 
     }
 
+    let handleClass = (e) => {
+
+            // console.log('inside handleClass')
+
+            // console.log(e.target.dataset.filter)
+            // console.log(e.target.innerHTML)
+
+            const classToShow = reduxDeck.filter(card => {
+                return card.classId === parseInt(e.target.dataset.filter)
+            })
+
+            setPageCards(classToShow)
+            setCurrentTitle(e.target.innerHTML)
+
+    }
+
     // useEffect(()=>{
 
     let loadView = () => {
 
-        jsx = demonHunter.map(card => {
+        jsx = cards.map(card => {
 
-            if(reduxDeck.cardTypeId !== 3)
+            if(card.cardTypeId !== 3)
             {
                 return <SingleCard key={card.slug} card={card}/>
             }
@@ -100,12 +115,54 @@ const Cards = () => {
 
     let setTitle = () => {
 
-        title =  <Row className="justify-content-center">
-                    <h1 id="cardsHeader" className="mb-0 mt-5">Showing {localStart} - {localStart + 40} of {reduxDeck.length} total cards</h1>
-                </Row>
+        // display the total class cards 
+
+        if(cards.length > 40)
+        {
+            title =  <Row className="justify-content-center">
+            <h1 id="cardsHeader" className="mb-0 mt-5">{currentTitle} ({cards.length})</h1>
+            </Row>
+        }
+        else{
+            title =  <Row className="justify-content-center">
+            <h1 id="cardsHeader" className="mb-0 mt-5"> Showing 40 of {reduxDeck.length} total cards</h1>
+        </Row>
+        }
 
         return title;
+    }
 
+    let loadPageButtons = () => {
+
+        if(cards.length <= 40)
+        {
+            pageJSX = <Row className="mt-0 pt-0">
+
+            <Col className="d-flex justify-content-center">
+                <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
+            </Col>
+
+            <Col className="d-flex justify-content-center">
+                <p id="pageNumber">{pageCounter}</p>
+            </Col>
+
+            <Col className="d-flex justify-content-center">
+                <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
+            </Col>
+
+            </Row>
+        }
+        else{
+            pageJSX = <Row className="mt-0 pt-0">
+
+            <Col className="d-flex justify-content-center">
+                <p id="pageNumber">That's it!</p>
+            </Col>
+
+            </Row>
+        }
+
+        return pageJSX;
     }
 
             // this is meant to keep the jsx from rendering until all of the pages are loaded
@@ -116,32 +173,32 @@ const Cards = () => {
     return reduxDeck.length > 2662 ? (
         <>
 
-            <Container>
+            <Container fluid>
 
                 {setTitle()}
 
-                    <br/>
+                {/*filtering buttons can go here*/}
+
+                <Row className="mt-3 mb-3 justify-content-center">
+                <Button id="classButton" style={{backgroundColor:'#5e3023', color:'white'}} size="sm" data-filter={2} onClick={handleClass}>Druid</Button>
+                <Button id="classButton" style={{backgroundColor:'#a7c957'}} size="sm" data-filter={3} onClick={handleClass}>Hunter</Button>
+                <Button id="classButton" style={{backgroundColor: '#48bfe3'}} size="sm" data-filter={4} onClick={handleClass}>Mage</Button>
+                <Button id="classButton"  style={{backgroundColor: '#c08552'}} size="sm" data-filter={5} onClick={handleClass}>Paladin</Button>
+                <Button id="classButton" style={{backgroundColor:'#d3d3d3'}} size="sm" data-filter={6} onClick={handleClass}>Priest</Button>
+                <Button id="classButton" style={{backgroundColor:'#495057', color:'white'}} size="sm" data-filter={7} onClick={handleClass}>Rogue</Button>
+                <Button id="classButton" style={{backgroundColor:'#006494', color:'white'}} size="sm" data-filter={8} onClick={handleClass}>Shaman</Button>
+                <Button id="classButton" style={{backgroundColor:'#240046', color:'white'}} size="sm" data-filter={9} onClick={handleClass}>Warlock</Button>
+                <Button id="classButton" style={{backgroundColor:'#a4161a', color:'white'}} size="sm" data-filter={10} onClick={handleClass}>Warrior</Button>
+                <Button id="classButton" style={{backgroundColor:'#386641', color:'white'}} size="sm" data-filter={14} onClick={handleClass}>Demon Hunter</Button>
+                <Button id="classButton" style={{backgroundColor:'#bcac9b'}} size="sm" data-filter={12} onClick={handleClass}>Neutral</Button>
+                </Row>
+
                 <Row className="justify-content-center">
                     {loadView()}
                 </Row>
 
-                    <br/>
 
-                <Row className="mt-0 pt-0">
-
-                    <Col className="d-flex justify-content-center">
-                        <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
-                    </Col>
-
-                    <Col className="d-flex justify-content-center">
-                        <p id="pageNumber">{pageCounter}</p>
-                    </Col>
-
-                    <Col className="d-flex justify-content-center">
-                        <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
-                    </Col>
-
-                </Row>
+                {loadPageButtons()}
 
             </Container>
 

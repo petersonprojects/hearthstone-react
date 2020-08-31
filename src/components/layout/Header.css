@@ -34,6 +34,7 @@
     font-family: 'Belwe';
     color:white;
     transition-duration: 0.3s;
+    
 }
 
 .verticalLine {
@@ -44,14 +45,15 @@
 #navLink{
     color:white;
     margin-left: 0.6rem;
-    transition-duration: 0.3s;
+    transition-duration: 0.5s;
     font-size: 0.8em;
 }
 
 #navLink:hover{
     color:#cbf3f0;
+    -webkit-transform: scale(1.1);
     transform: scale(1.2);
-    transition-duration: 0.3s;
+    transition-duration: 0.5s;
 }
 
 #searchButton:hover{
