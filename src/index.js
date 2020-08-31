@@ -3,9 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Cards from './components/Cards';
 import Heroes from './components/Heroes';
-import { createStore } from 'redux';
+import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducers/reducer';
+import reduxThunk from 'redux-thunk';
 import {
   BrowserRouter as Router,
   Route,
@@ -41,7 +42,8 @@ let loadFromLocalStore = () => {
 
 const persistedState = loadFromLocalStore();
 
-let store = createStore(reducer, persistedState, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+let store = createStore(reducer, persistedState,
+  compose(applyMiddleware(reduxThunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
 
 // this happens every time theres an update to the local store
 store.subscribe(()=>{
