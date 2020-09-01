@@ -407,8 +407,19 @@ const Cards = () => {
             </Modal.Body>
     
             <Modal.Footer>
-                <i style={{fontFamily: 'Belwe', fontSize:'0.5em'}}>{singleCard[0].flavorText}</i>
-                <Button id="add" onClick={addToCollection} variant="outline-info">+</Button>
+
+                <Row className="justify-content-center">
+
+                    <Col className="d-flex justify-content-center mb-4" xl={12} lg={12} md={12} sm={12} xs={12}>
+                        <i style={{fontFamily: 'Belwe', fontSize:'0.7em'}}>{singleCard[0].flavorText}</i>
+                    </Col>
+                    <Col className="d-flex justify-content-center" xl={12} lg={12} md={12} sm={12} xs={12}>
+                        <Button id="add" onClick={addToCollection} variant="outline-info">+Add to Collection</Button>
+                    </Col>
+
+
+                </Row>
+
             </Modal.Footer>
     
             </Modal>
@@ -434,10 +445,16 @@ const Cards = () => {
                 {/* search */}
 
                 <Row className="justify-content-center">
-                    <Form  inline>
-                        <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.8em', fontFamily:'Belwe'}} type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button onClick={handleClear} style={{fontSize:'0.8em', fontFamily:'Belwe'}} id="searchButton" variant="outline-dark" >Reset</Button>
-                    </Form>
+
+                    <Col xl={6} lg={6} md={6} sm={6} xs={6} className="d-flex justify-content-end ml-2 mr-0 pr-0">
+                        <Form >
+                            <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.7em', fontFamily:'Belwe'}} type="text" placeholder="Search" className="mr-2" />
+                        </Form>
+                    </Col>
+                    <Col xl={5} lg={5} md={5} sm={5} xs={5} className="d-flex justify-content-start ml-0 pl-0">
+                        <Button onClick={handleClear} style={{fontSize:'0.7em', fontFamily:'Belwe'}} id="searchButton" variant="outline-dark" >Reset</Button>
+                    </Col>
+
                 </Row>
 
 

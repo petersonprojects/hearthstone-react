@@ -29,6 +29,7 @@ const Header = () => {
                     <Nav.Link id="navLink" href="/">Home</Nav.Link>
                     <Nav.Link id="navLink" href="/cards">All Cards</Nav.Link>
                     <Nav.Link id="navLink" href="/heroes">Heroes</Nav.Link>
+                    <Nav.Link id="navLink" href="/heroes">My Collection</Nav.Link>
                     <Nav.Link target="_blank" href="https://github.com/petersonprojects/hearthstone-react" style={{ marginTop:'-10px'}}><img style={{height:'1.5em', width:'1.5em'}} src="./score.png"></img></Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
