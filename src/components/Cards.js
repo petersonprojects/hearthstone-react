@@ -30,6 +30,7 @@ const Cards = () => {
     const [searchResults, setSearchResults] = useState('');
 
     const [isOpen, setIsOpen] = useState(false);
+    const [cardID, setCardID] = useState('');
 
     const dispatch = useDispatch();
 
@@ -260,8 +261,48 @@ const Cards = () => {
 
     let triggerModal = (e) => {
 
-        console.log(e.target.id)
+        setCardID(e.target.id)
+
         openModal()
+
+    }
+
+    let generateUniqueModal = () => {
+
+        let singleCard = reduxDeck.filter(card => {
+
+            return card.slug === cardID
+        })
+
+
+        console.log(singleCard)
+
+        if(isOpen == true)
+        {
+
+            return <Modal show={isOpen} onHide={closeModal}>
+
+            <Modal.Header closeButton>
+                <Modal.Title>{singleCard[0].name}</Modal.Title>
+            </Modal.Header>
+    
+            <Modal.Body id="modalBod">
+                {singleCard[0].text}
+                <br/>
+                {singleCard[0].flavorText}
+            </Modal.Body>
+    
+            <Modal.Footer>
+                <Button onClick={closeModal} variant="secondary">Close</Button>
+            </Modal.Footer>
+    
+            </Modal>
+        }
+        else{
+            return null;
+        }
+
+
     }
 
 
@@ -279,7 +320,7 @@ const Cards = () => {
 
                 <Row className="justify-content-center">
                     <Form  inline>
-                        <FormControl autocomplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.8em'}} type="text" placeholder="Search" className="mr-sm-2" />
+                        <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.8em'}} type="text" placeholder="Search" className="mr-sm-2" />
                         <Button  onClick={handleClear} style={{fontSize:'0.8em'}} id="searchButton" variant="outline-dark" >Reset</Button>
                     </Form>
                 </Row>
@@ -311,21 +352,8 @@ const Cards = () => {
             </Container>
 
             {/* modal code */}
-            <Modal show={isOpen} onHide={closeModal}>
 
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-
-                <Modal.Body>
-                    Woohoo, you're reading this text in a modal!
-                </Modal.Body>
-
-                <Modal.Footer>
-                    <Button onClick={closeModal} variant="secondary">Close</Button>
-                </Modal.Footer>
-
-            </Modal>
+            {generateUniqueModal()}
 
         </>
     // else show the loading image
