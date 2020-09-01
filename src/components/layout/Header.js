@@ -20,15 +20,16 @@ const Header = () => {
     return (
         <>
             <Navbar id="headerTitle" bg="dark" expand="lg" sticky="top">
-                <Navbar.Brand id="headerTitle" href="/">Hearthstone <b className="reactBold" style={{color:'lightskyblue'}}>React</b></Navbar.Brand>
+                <Navbar.Brand id="headerTitle" href="/">Hearthstone <b className="reactBold mr-auto" style={{color:'lightskyblue'}}>React</b></Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
                 <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto verticalLine">
+                <Nav className="ml-auto verticalLine">
                     <Nav.Link id="navLink" href="/">Home</Nav.Link>
                     <Nav.Link id="navLink" href="/cards">All Cards</Nav.Link>
                     <Nav.Link id="navLink" href="/heroes">Heroes</Nav.Link>
+                    <Nav.Link target="_blank" href="https://github.com/petersonprojects/hearthstone-react" style={{ marginTop:'-10px'}}><img style={{height:'1.5em', width:'1.5em'}} src="./score.png"></img></Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>

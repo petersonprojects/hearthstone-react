@@ -267,6 +267,10 @@ const Cards = () => {
 
     }
 
+    let addToCollection = () => {
+        // stretch goal
+    }
+
     let generateUniqueModal = () => {
 
         let score = 0;
@@ -276,35 +280,103 @@ const Cards = () => {
             return card.slug === cardID
         })
 
-        if(singleCard.slug)
-
-
-        console.log(singleCard)
+        // calculate score here based on health, attack, manaCost and effects
 
         if(isOpen == true)
         {
+
+            let health = parseInt(singleCard[0].health);
+            let attack = parseInt(singleCard[0].attack);
+            let mana = parseInt(singleCard[0].manaCost);
+
+            let bgc = 'white';
+
+            let ratio = ((health + attack) / mana) * 3
+
+            if( (mana * 2) === (health+attack))
+            {
+                score =  3;
+            }
+            else if((mana * 2) <= (health+attack))
+            {
+                score = 5
+            }
+            // this is also going to include all spells
+            else
+            {
+                score = 1;
+            }
+            
+            if(singleCard[0].text)
+            {
+                score = score + 1;
+            }
+
+            if(singleCard[0].rarityId === 1 || singleCard[0].rarityId === 2)
+            {
+                // commmon types get no score increase
+                score = score + 0;
+                bgc = 'lightgray'
+            }
+            else if(singleCard[0].rarityId === 5)
+            {
+                // legendary
+                score = score + 3;
+                bgc = 'orange'
+            }
+            else if(singleCard[0].rarityId === 3)
+            {
+                // rare
+                score = score + 1
+                bgc = '#0077b6'
+            }
+            else if(singleCard[0].rarityId === 4)
+            {
+                // epic
+                score = score + 2
+                bgc = 'rebeccapurple'
+            }
+
+            if(score * 2 <= 20 && (!health))
+            {
+                score = score * 2
+                if(score > 10)
+                {
+                    score = 10;
+                }
+            }
+
 
             let jsxModalHP;
 
             if(singleCard[0].health == undefined || singleCard[0].health == null)
             {
-                jsxModalHP = ''
+                jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./mana_crystal.png"/> {singleCard[0].manaCost}</Modal.Title>
             }
             else
             {
-                jsxModalHP = <><Modal.Title><img style={{height:'70px', width:'50px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
-                <Modal.Title><img style={{height:'70px', width:'50px', marginLeft:'40px'}} src="./health.png"/> {singleCard[0].health}</Modal.Title></>
+                jsxModalHP = <>
+                <Modal.Title><img style={{height:'50px', width:'50px'}} src="./mana_crystal.png"/> {singleCard[0].manaCost}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./health.png"/> {singleCard[0].health}</Modal.Title></>
             }
 
             return <Modal style={{fontFamily:'Belwe'}} show={isOpen} onHide={closeModal}>
-            
-            
-            <Modal.Header closeButton>
+
+            <Modal.Header>
             <Row className="justify-content-center">
-                <img style={{height:'80px', width: '400px', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
-                <Col className="d-flex justify-content-center mb-3 mt-3" lg={12}>
-                    <Modal.Title>{singleCard[0].name}</Modal.Title>
+                <Col className="d-flex justify-content-center">
+                    <img style={{height:'80px', width: '400px', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
                 </Col>
+
+                <Col className="d-flex justify-content-center mb-0 mt-3" lg={12}>
+                    <Modal.Title style={{marginLeft:'10px'}}>{singleCard[0].name}</Modal.Title>
+                </Col>
+
+                <Col xl={12}>
+                    <hr style={{height:'10px', backgroundColor: bgc}}></hr>
+                </Col>
+
 
                 <br/>
 
@@ -316,22 +388,27 @@ const Cards = () => {
     
             <Modal.Body id="modalBod">
 
-            <Row>
+            <Row className="align-items-center">
 
-                <Col xl={8}>React Score (1-10) </Col>
-                <Col xl={4}>
+                <Col className="d-flex justify-content-end" xl={8} lg={8} md={8} sm={8} xs={8}>Raw Score (1-10) </Col>
+                <Col xl={4} lg={4} md={4} sm={4} xs={4}>
                     <img style={{height:'50px', width:'50px'}} src="./score.png"></img>
                     {score}
                 </Col>
 
             </Row>
 
+            <Row className="justify-content-center ml-4 mr-4" style={{fontSize:'0.3em'}}>
+                Raw Score is calculated based on mana cost, health, attack, rarity and card text. Creating a deck based only off of high raw scores is not a good idea. It is merely a data point used
+                to steer you in the right direction, but it is up to you to decide the synergy of your deck!
+            </Row>
+
 
             </Modal.Body>
     
             <Modal.Footer>
-                <i style={{fontFamily: 'Belwe', fontSize:'0.5em', float:'left'}}>{singleCard[0].flavorText}</i>
-                <Button onClick={closeModal} variant="secondary">Close</Button>
+                <i style={{fontFamily: 'Belwe', fontSize:'0.5em'}}>{singleCard[0].flavorText}</i>
+                <Button id="add" onClick={addToCollection} variant="outline-info">+</Button>
             </Modal.Footer>
     
             </Modal>
