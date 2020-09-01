@@ -1,5 +1,13 @@
 import axios from 'axios';
 
+export let searchAction = (value) => {
+
+    return {
+        type: "SEARCH",
+        data: value
+    }
+}
+
 
 export const loadCards = () => {
 

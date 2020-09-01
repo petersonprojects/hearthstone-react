@@ -1,12 +1,20 @@
 import React from 'react';
+import { useDispatch } from 'react-redux'
 import { Navbar, Nav, Form, FormControl, Button } from 'react-bootstrap';
 import './Header.css';
+import { searchAction } from '../../actions/cardActions';
 
 const Header = () => {
 
-    // const [heroes, setHeroes] = useState(false)
-    // let handleIt = () => {
-    //     setHeroes(true);
+    // const dispatch = useDispatch()
+
+    // let handleChange = (e) => {
+
+    //     let value = e.target.value;
+
+    //     dispatch(searchAction(value))
+
+    //     console.log(value)
     // }
 
     return (
@@ -22,10 +30,6 @@ const Header = () => {
                     <Nav.Link id="navLink" href="/cards">All Cards</Nav.Link>
                     <Nav.Link id="navLink" href="/heroes">Heroes</Nav.Link>
                 </Nav>
-                <Form  inline>
-                    <FormControl style={{fontSize:'0.8em'}} type="text" placeholder="Search" className="mr-sm-2" />
-                    <Button style={{fontSize:'0.8em'}} id="searchButton" variant="outline-light">Search</Button>
-                </Form>
                 </Navbar.Collapse>
             </Navbar>
         </>

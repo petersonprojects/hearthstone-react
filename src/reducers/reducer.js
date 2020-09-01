@@ -4,7 +4,8 @@
 
 const initialState = {
     counter: 1,
-    cards:[]
+    cards:[],
+    search: ''
 }
 
 const reducer = (state = initialState, action) => {
@@ -21,6 +22,11 @@ const reducer = (state = initialState, action) => {
             return{
                 ...state,
                 cards: action.data
+            }
+        case "SEARCH":
+            return {
+                ...state,
+                search: action.data
             }
         default:
             return state;

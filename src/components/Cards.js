@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import SingleCard from './SingleCard';
-import { Row, Container, Button, Col } from 'react-bootstrap';
+import { Row, Container, Button, Col, Form, FormControl, Modal } from 'react-bootstrap';
 import './Cards.css';
 import { useDispatch, useSelector } from 'react-redux';
 import {loadCards} from '../actions/cardActions';
@@ -11,7 +11,8 @@ const Cards = () => {
     let jsx = null;
     let title = null;
     let pageJSX = null;
-    // const totalPages = 68;
+
+    const totalPages = 68;
 
     // array of all 2663 cards in global state
     const reduxDeck = useSelector(state => state.cards);
@@ -25,6 +26,10 @@ const Cards = () => {
 
     const [cards, setPageCards] = useState([]);
     const [currentTitle, setCurrentTitle] = useState('All')
+
+    const [searchResults, setSearchResults] = useState('');
+
+    const [isOpen, setIsOpen] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -62,11 +67,19 @@ const Cards = () => {
 
     }, [pageCounter])
 
+// functions
+
+    const scrollTop = () => {
+
+        window.scrollTo({top: 0, behavior: 'smooth'});
+
+    }
+
     let handleNext = () => {
 
         setCounter(pageCounter + 1);
         setLocal(localStart + 41);
-
+        scrollTop()
     }
 
     let handlePrevious = () => {
@@ -74,16 +87,12 @@ const Cards = () => {
         if(pageCounter > 1){
             setCounter(pageCounter - 1)
             setLocal(localStart - 41)
+            scrollTop()
         }
 
     }
 
     let handleClass = (e) => {
-
-            // console.log('inside handleClass')
-
-            // console.log(e.target.dataset.filter)
-            // console.log(e.target.innerHTML)
 
             const classToShow = reduxDeck.filter(card => {
                 return card.classId === parseInt(e.target.dataset.filter)
@@ -94,13 +103,77 @@ const Cards = () => {
 
     }
 
-    let triggerModal = (e) => {
+    useEffect(()=> {
+        
+        if(searchResults !== ''){
+            let filteredList;
+            console.log(searchResults)
+    
+            if(searchResults !== '')
+            {
+                filteredList = cards.filter(card => {
+                    return card.name.toLowerCase().includes(searchResults.toLowerCase())
+                })
+    
+                setPageCards(filteredList)
+            }
+            else if(searchResults === '' || searchResults == undefined){
+                setPageCards(cards)
+            }
+        }
 
-        console.log(e.target.id)
+    }, [searchResults])
+
+    let handleSearch = (e) => {
+
+        var key = e.keyCode || e.charCode;
+
+        if( key == 8 ){
+            //backspace pressed do nothing
+            setSearchResults('')
+        }
+
+        else if(key !== 8)
+        {
+            setSearchResults(e.target.value)
+        }
 
     }
 
-    // useEffect(()=>{
+    let handleClear = (e) => {
+        
+        setSearchResults('')
+
+        let input = document.getElementById('search');
+        input.value = '';
+
+        if(cards.length <= 40)
+        {
+            let start;
+
+            if(pageCounter === 1)
+            {
+                start = 0;
+            }
+            else
+            {
+                start = (pageCounter * 40)-40;
+            }
+    
+            // filter out the hero "cards"
+            let filtered = reduxDeck.filter(card => {
+                return card.cardTypeId !== 3 
+            })
+    
+            let end = start + 40;
+            let newPage = filtered.slice(start, end);
+            setPageCards(newPage);
+        }
+        else{
+            setPageCards(cards)
+        }
+
+    }
 
     let loadView = () => {
 
@@ -131,12 +204,14 @@ const Cards = () => {
         }
         else{
             title =  <Row className="justify-content-center">
-            <h1 id="cardsHeader" className="mb-0 mt-5"> Showing 40 of {reduxDeck.length} total cards</h1>
+            <h1 id="cardsHeader" className="mb-0 mt-5"> Page {pageCounter} of {totalPages}</h1>
         </Row>
         }
 
         return title;
     }
+
+    // <Button onClick={scrollTop} id="scrollTop" style={{height: 40, display: showScroll ? 'flex' : 'none'}} title="Go to top">Top</Button>
 
     let loadPageButtons = () => {
 
@@ -159,6 +234,7 @@ const Cards = () => {
             </Row>
         }
         else{
+
             pageJSX = <Row className="mt-0 pt-0">
 
             <Col className="d-flex justify-content-center">
@@ -171,17 +247,43 @@ const Cards = () => {
         return pageJSX;
     }
 
-            // this is meant to keep the jsx from rendering until all of the pages are loaded
+    let openModal = () => {
+
+        setIsOpen(true)
+    }
+
+    let closeModal = () => {
+
+        setIsOpen(false)
+    }
 
 
-    // }, [reduxDeck])
+    let triggerModal = (e) => {
 
+        console.log(e.target.id)
+        openModal()
+    }
+
+
+
+    // if the entire redux deck has been loaded in, then load the cards
     return reduxDeck.length > 2662 ? (
         <>
 
             <Container fluid>
 
                 {setTitle()}
+                <br/>
+
+                {/* search */}
+
+                <Row className="justify-content-center">
+                    <Form  inline>
+                        <FormControl autocomplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.8em'}} type="text" placeholder="Search" className="mr-sm-2" />
+                        <Button  onClick={handleClear} style={{fontSize:'0.8em'}} id="searchButton" variant="outline-dark" >Reset</Button>
+                    </Form>
+                </Row>
+
 
                 {/*filtering buttons can go here*/}
 
@@ -208,8 +310,25 @@ const Cards = () => {
 
             </Container>
 
-        </>
+            {/* modal code */}
+            <Modal show={isOpen} onHide={closeModal}>
 
+                <Modal.Header closeButton>
+                    <Modal.Title>Modal heading</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    Woohoo, you're reading this text in a modal!
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button onClick={closeModal} variant="secondary">Close</Button>
+                </Modal.Footer>
+
+            </Modal>
+
+        </>
+    // else show the loading image
     ) : (<><div className="mt-3 mb-3">
             <img style={{height:'200px', width:'200px'}} alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>
         </div></>)
