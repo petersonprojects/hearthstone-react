@@ -269,6 +269,8 @@ const Cards = () => {
 
     let generateUniqueModal = () => {
 
+        let score = 0;
+
         let singleCard = reduxDeck.filter(card => {
 
             return card.slug === cardID
@@ -282,19 +284,17 @@ const Cards = () => {
         if(isOpen == true)
         {
 
-            let jsxModalTitle;
+            let jsxModalHP;
 
             if(singleCard[0].health == undefined || singleCard[0].health == null)
             {
-                jsxModalTitle = ''
+                jsxModalHP = ''
             }
             else
             {
-                jsxModalTitle = <><Modal.Title><img style={{height:'70px', width:'50px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
+                jsxModalHP = <><Modal.Title><img style={{height:'70px', width:'50px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
                 <Modal.Title><img style={{height:'70px', width:'50px', marginLeft:'40px'}} src="./health.png"/> {singleCard[0].health}</Modal.Title></>
             }
-
-            console.log(jsxModalTitle)
 
             return <Modal style={{fontFamily:'Belwe'}} show={isOpen} onHide={closeModal}>
             
@@ -302,21 +302,30 @@ const Cards = () => {
             <Modal.Header closeButton>
             <Row className="justify-content-center">
                 <img style={{height:'80px', width: '400px', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
-                <Col lg={12}>
+                <Col className="d-flex justify-content-center mb-3 mt-3" lg={12}>
                     <Modal.Title>{singleCard[0].name}</Modal.Title>
                 </Col>
 
                 <br/>
 
-                {jsxModalTitle}
+                {jsxModalHP}
 
             </Row>
 
             </Modal.Header>
     
             <Modal.Body id="modalBod">
-                {singleCard[0].text}
-                <br/>
+
+            <Row>
+
+                <Col xl={8}>React Score (1-10) </Col>
+                <Col xl={4}>
+                    <img style={{height:'50px', width:'50px'}} src="./score.png"></img>
+                    {score}
+                </Col>
+
+            </Row>
+
 
             </Modal.Body>
     
@@ -349,8 +358,8 @@ const Cards = () => {
 
                 <Row className="justify-content-center">
                     <Form  inline>
-                        <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.8em'}} type="text" placeholder="Search" className="mr-sm-2" />
-                        <Button  onClick={handleClear} style={{fontSize:'0.8em'}} id="searchButton" variant="outline-dark" >Reset</Button>
+                        <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.8em', fontFamily:'Belwe'}} type="text" placeholder="Search" className="mr-sm-2" />
+                        <Button onClick={handleClear} style={{fontSize:'0.8em', fontFamily:'Belwe'}} id="searchButton" variant="outline-dark" >Reset</Button>
                     </Form>
                 </Row>
 
