@@ -274,25 +274,54 @@ const Cards = () => {
             return card.slug === cardID
         })
 
+        if(singleCard.slug)
+
 
         console.log(singleCard)
 
         if(isOpen == true)
         {
 
-            return <Modal show={isOpen} onHide={closeModal}>
+            let jsxModalTitle;
 
+            if(singleCard[0].health == undefined || singleCard[0].health == null)
+            {
+                jsxModalTitle = ''
+            }
+            else
+            {
+                jsxModalTitle = <><Modal.Title><img style={{height:'70px', width:'50px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
+                <Modal.Title><img style={{height:'70px', width:'50px', marginLeft:'40px'}} src="./health.png"/> {singleCard[0].health}</Modal.Title></>
+            }
+
+            console.log(jsxModalTitle)
+
+            return <Modal style={{fontFamily:'Belwe'}} show={isOpen} onHide={closeModal}>
+            
+            
             <Modal.Header closeButton>
-                <Modal.Title>{singleCard[0].name}</Modal.Title>
+            <Row className="justify-content-center">
+                <img style={{height:'80px', width: '400px', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
+                <Col lg={12}>
+                    <Modal.Title>{singleCard[0].name}</Modal.Title>
+                </Col>
+
+                <br/>
+
+                {jsxModalTitle}
+
+            </Row>
+
             </Modal.Header>
     
             <Modal.Body id="modalBod">
                 {singleCard[0].text}
                 <br/>
-                {singleCard[0].flavorText}
+
             </Modal.Body>
     
             <Modal.Footer>
+                <i style={{fontFamily: 'Belwe', fontSize:'0.5em', float:'left'}}>{singleCard[0].flavorText}</i>
                 <Button onClick={closeModal} variant="secondary">Close</Button>
             </Modal.Footer>
     
