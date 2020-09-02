@@ -1,6 +1,6 @@
 ## Hearthstone React
 
-![alt text](/Users/micahpeterson/Desktop/hsreact1.png)
+![alt text](./public/hsreact1.png)
 
 
 Allow me to introduce my most recent project: Hearthstone React. To be as concise as possible, Hearthstone React is essentially a data visualization tool (built with React.js and Redux) that uses Blizzard's free api to generate "card spaces" based on the user's needs. If you've played Hearthstone before you know that there are thousands of cards in the game, but you can only choose 30 to go into your deck. This makes deck-building very challenging, especially for beginners.
