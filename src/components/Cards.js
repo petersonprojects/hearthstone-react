@@ -112,15 +112,16 @@ const Cards = () => {
     
             if(searchResults !== '')
             {
-                filteredList = cards.filter(card => {
+                filteredList = reduxDeck.filter(card => {
                     return card.name.toLowerCase().includes(searchResults.toLowerCase())
                 })
     
                 setPageCards(filteredList)
             }
-            else if(searchResults === '' || searchResults == undefined){
-                setPageCards(cards)
-            }
+
+        }
+        else if(searchResults === '' || searchResults == undefined){
+            setPageCards(reduxDeck.slice(0,40))
         }
 
     }, [searchResults])
@@ -414,7 +415,7 @@ const Cards = () => {
                         <i style={{fontFamily: 'Belwe', fontSize:'0.7em'}}>{singleCard[0].flavorText}</i>
                     </Col>
                     <Col className="d-flex justify-content-center" xl={12} lg={12} md={12} sm={12} xs={12}>
-                        <Button id="add" onClick={addToCollection} variant="outline-info">+Add to Collection</Button>
+                        <Button id="add" onClick={addToCollection} variant="outline-info">+Add to collection</Button>
                     </Col>
 
 
@@ -448,7 +449,7 @@ const Cards = () => {
 
                     <Col xl={6} lg={6} md={6} sm={6} xs={6} className="d-flex justify-content-end ml-2 mr-0 pr-0">
                         <Form >
-                            <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.7em', fontFamily:'Belwe'}} type="text" placeholder="Search" className="mr-2" />
+                            <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.7em', fontFamily:'Belwe'}} type="text" placeholder="Search all cards" className="mr-2" />
                         </Form>
                     </Col>
                     <Col xl={5} lg={5} md={5} sm={5} xs={5} className="d-flex justify-content-start ml-0 pl-0">

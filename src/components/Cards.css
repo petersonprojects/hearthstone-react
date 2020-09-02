@@ -70,6 +70,13 @@ img:hover{
     margin-left: 7px;
     margin-top: 7px;
     transition-duration: 0.5s;
+    border: 1px solid black;
+}
+
+#classButton:hover{
+    -webkit-transform: scale(1.08);
+    transform: scale(1.08);
+    transition-duration: 0.5s;
 }
 
 #scrollTop {
@@ -99,10 +106,5 @@ opacity: 1;
 }
 }
 
-#classButton:hover{
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
-    transition-duration: 0.5s;
-}
 
 
