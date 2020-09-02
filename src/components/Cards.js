@@ -356,7 +356,7 @@ const Cards = () => {
             else
             {
                 jsxModalHP = <>
-                <Modal.Title><img style={{height:'50px', width:'50px'}} src="./mana_crystal.png"/> {singleCard[0].manaCost}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'50px'}} src="./mana_crystal.png"/> {singleCard[0].manaCost}</Modal.Title>
                 <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
                 <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./health.png"/> {singleCard[0].health}</Modal.Title></>
             }
