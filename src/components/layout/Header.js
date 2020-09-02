@@ -20,7 +20,7 @@ const Header = () => {
     return (
         <>
             <Navbar id="headerTitle" bg="dark" expand="lg" sticky="top">
-                <Navbar.Brand id="headerTitle" href="/">Hearthstone <b className="reactBold mr-auto" style={{color:'lightskyblue'}}>React</b></Navbar.Brand>
+                <Navbar.Brand id="headerTitle" href="/">Hearthstone<b className="reactBold mr-auto" style={{color:'lightskyblue'}}>React</b></Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
