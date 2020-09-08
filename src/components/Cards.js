@@ -120,7 +120,7 @@ const Cards = () => {
             }
 
         }
-        else if(searchResults === '' || searchResults == undefined){
+        else if(searchResults === '' || searchResults === undefined){
             setPageCards(reduxDeck.slice(0,40))
         }
 
@@ -130,7 +130,7 @@ const Cards = () => {
 
         var key = e.keyCode || e.charCode;
 
-        if( key == 8 ){
+        if( key === 8 ){
             //backspace pressed do nothing
             setSearchResults('')
         }
@@ -283,7 +283,7 @@ const Cards = () => {
 
         // calculate score here based on health, attack, manaCost and effects
 
-        if(isOpen == true)
+        if(isOpen === true)
         {
 
             let health = parseInt(singleCard[0].health);
@@ -291,8 +291,6 @@ const Cards = () => {
             let mana = parseInt(singleCard[0].manaCost);
 
             let bgc = 'white';
-
-            let ratio = ((health + attack) / mana) * 3
 
             if( (mana * 2) === (health+attack))
             {
@@ -350,16 +348,16 @@ const Cards = () => {
 
             let jsxModalHP;
 
-            if(singleCard[0].health == undefined || singleCard[0].health == null)
+            if(singleCard[0].health === undefined || singleCard[0].health === null)
             {
-                jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./mana_crystal.png"/> {singleCard[0].manaCost}</Modal.Title>
+                jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
             }
             else
             {
                 jsxModalHP = <>
-                <Modal.Title><img style={{height:'60px', width:'50px'}} src="./mana_crystal.png"/> {singleCard[0].manaCost}</Modal.Title>
-                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./attack.png"/> {singleCard[0].attack}</Modal.Title>
-                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./health.png"/> {singleCard[0].health}</Modal.Title></>
+                <Modal.Title><img style={{height:'60px', width:'50px'}} src="./images/mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./images/attack.png" alt="hi"/> {singleCard[0].attack}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./images/health.png" alt="hi"/> {singleCard[0].health}</Modal.Title></>
             }
 
             return <Modal style={{fontFamily:'Belwe'}} show={isOpen} onHide={closeModal}>
@@ -393,7 +391,7 @@ const Cards = () => {
 
                 <Col className="d-flex justify-content-end" xl={8} lg={8} md={8} sm={8} xs={8}>Raw Score (1-10) </Col>
                 <Col xl={4} lg={4} md={4} sm={4} xs={4}>
-                    <img style={{height:'50px', width:'50px'}} src="./score.png"></img>
+                    <img style={{height:'50px', width:'50px'}} src="./images/score.png" alt="score"></img>
                     {score}
                 </Col>
 
