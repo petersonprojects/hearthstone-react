@@ -1,7 +1,4 @@
 
-// can I make the cards api call here?
-
-
 const initialState = {
     counter: 1,
     cards:[],

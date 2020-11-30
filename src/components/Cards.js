@@ -12,9 +12,9 @@ const Cards = () => {
     let title = null;
     let pageJSX = null;
 
-    const totalPages = 68;
+    const totalPages = 70;
 
-    // array of all 2663 cards in global state
+    // array of all cards in global state
     const reduxDeck = useSelector(state => state.cards);
 
     // the counter that changes with page click
@@ -350,7 +350,7 @@ const Cards = () => {
 
             if(singleCard[0].health === undefined || singleCard[0].health === null)
             {
-                jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
+                jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./images/mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
             }
             else
             {

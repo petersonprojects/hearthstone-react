@@ -4,17 +4,6 @@ import './Header.css';
 
 const Header = () => {
 
-    // const dispatch = useDispatch()
-
-    // let handleChange = (e) => {
-
-    //     let value = e.target.value;
-
-    //     dispatch(searchAction(value))
-
-    //     console.log(value)
-    // }
-
     return (
         <>
             <Navbar id="headerTitle" bg="dark" expand="lg" sticky="top">
@@ -28,7 +17,7 @@ const Header = () => {
                     <Nav.Link id="navLink" href="/cards">All Cards</Nav.Link>
                     <Nav.Link id="navLink" href="/heroes">Heroes</Nav.Link>
                     <Nav.Link id="navLink" href="/heroes">My Collection</Nav.Link>
-                    <Nav.Link target="_blank" href="https://github.com/petersonprojects/hearthstone-react" style={{ marginTop:'-10px'}}><img style={{height:'1.5em', width:'1.5em'}} src="./score.png" alt="things"></img></Nav.Link>
+                    <Nav.Link target="_blank" href="https://github.com/petersonprojects/hearthstone-react" style={{ marginTop:'-10px'}}><img style={{height:'1.5em', width:'1.5em'}} src="./images/score.png" alt="things"></img></Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>
