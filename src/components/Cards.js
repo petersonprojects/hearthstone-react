@@ -17,6 +17,8 @@ const Cards = () => {
     // array of all cards in global state
     const reduxDeck = useSelector(state => state.cards);
 
+    const [myCollection, setMyCollection] = useState([]);
+
     // the counter that changes with page click
     // the counter that displays what cards being shown in array (42-82)
     // the counter used to load all 68 pages of cards
@@ -34,6 +36,7 @@ const Cards = () => {
 
     const dispatch = useDispatch();
 
+    // acts like a component did mount
     useEffect(()=>{
 
         if(reduxDeck.length < 2662)
@@ -43,7 +46,7 @@ const Cards = () => {
 
     }, [])
 
-    // // rerenders the page with specific array items when the page number is altered
+    // rerenders the page with specific array items when the page number is altered
     useEffect(()=>{
 
         let start;
@@ -415,7 +418,6 @@ const Cards = () => {
                     <Col className="d-flex justify-content-center" xl={12} lg={12} md={12} sm={12} xs={12}>
                         <Button id="add" onClick={addToCollection} variant="outline-info">+Add to collection</Button>
                     </Col>
-
 
                 </Row>
 
