@@ -213,8 +213,6 @@ const Cards = () => {
         return title;
     }
 
-    // <Button onClick={scrollTop} id="scrollTop" style={{height: 40, display: showScroll ? 'flex' : 'none'}} title="Go to top">Top</Button>
-
     let loadPageButtons = () => {
 
         if(cards.length <= 40)
@@ -292,11 +290,11 @@ const Cards = () => {
 
             let bgc = 'white';
 
-            if( (mana * 2) === (health+attack))
+            if((mana * 2) === (health + attack))
             {
                 score =  3;
             }
-            else if((mana * 2) <= (health+attack))
+            else if((mana * 2) <= (health + attack))
             {
                 score = 5
             }
@@ -336,6 +334,9 @@ const Cards = () => {
                 bgc = 'rebeccapurple'
             }
 
+            // if the card is a weapon or a spell, just double score
+            // (because attack and health are used to calc score)
+
             if(score * 2 <= 20 && (!health))
             {
                 score = score * 2
@@ -344,7 +345,6 @@ const Cards = () => {
                     score = 10;
                 }
             }
-
 
             let jsxModalHP;
 
