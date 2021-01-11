@@ -15,7 +15,7 @@ export const loadCards = () => {
 
         var accessToken;
         // first make a call to localhost:3000/api to receive an oauth token as a response
-        // need to make this async
+
         await fetch('http://localhost:3000/api')
         .then(res => res.json())
         .then(data => {
@@ -23,10 +23,7 @@ export const loadCards = () => {
             accessToken = data.aToken
         })
         .catch(err => console.log(err))
-    
 
-        // working! using proxy
-        // console.log(accessToken);
 
         try{
 

@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Cards from './components/Cards';
 import Heroes from './components/Heroes';
-import Feature from './components/Feature';
-import Signin from './components/auth/Singin';
-import Signout from './components/auth/Signout';
-import Signup from './components/auth/Signup';
+// import Feature from './components/Feature';
+// import Signin from './components/auth/Singin';
+// import Signout from './components/auth/Signout';
+// import Signup from './components/auth/Signup';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducers/reducer';
@@ -47,8 +47,7 @@ let loadFromLocalStore = () => {
 const persistedState = loadFromLocalStore();
 
 
-let store = createStore(reducer, persistedState,
-  compose(applyMiddleware(reduxThunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
+let store = createStore(reducer, persistedState, compose(applyMiddleware(reduxThunk), window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));
 
 // this happens every time theres an update to the local store
 store.subscribe(()=>{
@@ -67,10 +66,10 @@ ReactDOM.render(
           <Route exact path='/' component={App}/>
           <Route path='/cards' component={Cards}/>
           <Route path='/heroes' component={Heroes}/>
-          <Route path ='/signup' component = {Signup}/>
+          {/* <Route path ='/signup' component = {Signup}/>
           <Route path ='/feature' component = {Feature}/>
           <Route path ='/signout' component = {Signout}/>
-          <Route path ='/signin' component = {Signin}/>
+          <Route path ='/signin' component = {Signin}/> */}
 
           <Route component={App}/>
 

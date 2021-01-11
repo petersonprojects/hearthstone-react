@@ -4,7 +4,7 @@ import SingleCard from './SingleCard';
 import { Row, Container, Button, Col, Form, FormControl, Modal } from 'react-bootstrap';
 import './Cards.css';
 import { useDispatch, useSelector } from 'react-redux';
-import {loadCards} from '../actions/cardActions';
+import { loadCards } from '../actions/cardActions';
 
 const Cards = () => {
 
@@ -12,12 +12,13 @@ const Cards = () => {
     let title = null;
     let pageJSX = null;
 
-    const totalPages = 70;
+    const totalPages = 71;
 
     // array of all cards in global state
     const reduxDeck = useSelector(state => state.cards);
+    const dispatch = useDispatch();
 
-    const [myCollection, setMyCollection] = useState([]);
+    // const [myCollection, setMyCollection] = useState([]);
 
     // the counter that changes with page click
     // the counter that displays what cards being shown in array (42-82)
@@ -34,17 +35,17 @@ const Cards = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [cardID, setCardID] = useState('');
 
-    const dispatch = useDispatch();
 
     // acts like a component did mount
     useEffect(()=>{
 
+        // if all the cards are not in the redux state, then dispatch loadCards action (redux thunk)
         if(reduxDeck.length < 2662)
         {
             dispatch(loadCards())
         }
 
-    }, [])
+    })
 
     // rerenders the page with specific array items when the page number is altered
     useEffect(()=>{
@@ -66,7 +67,7 @@ const Cards = () => {
         })
 
         let end = start + 40;
-        let newPage = filtered.slice(start, end);
+        let newPage = reduxDeck.slice(start, end);
         setPageCards(newPage);
 
     }, [pageCounter])
@@ -222,17 +223,17 @@ const Cards = () => {
         {
             pageJSX = <Row className="mt-0 pt-0">
 
-            <Col className="d-flex justify-content-center">
-                <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
-            </Col>
+                <Col className="d-flex justify-content-center">
+                    <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
+                </Col>
 
-            <Col className="d-flex justify-content-center">
-                <p id="pageNumber">{pageCounter}</p>
-            </Col>
+                <Col className="d-flex justify-content-center">
+                    <p id="pageNumber">{pageCounter}</p>
+                </Col>
 
-            <Col className="d-flex justify-content-center">
-                <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
-            </Col>
+                <Col className="d-flex justify-content-center">
+                    <Button id="nextButton" className="mb-4"  variant="dark" onClick={handleNext}><i className="fa fa-arrow-right" aria-hidden="true"></i></Button>
+                </Col>
 
             </Row>
         }
@@ -351,10 +352,12 @@ const Cards = () => {
 
             let jsxModalHP;
 
+            // if the card is a spell and not a minion, jsut display its mana cost in the modal
             if(singleCard[0].health === undefined || singleCard[0].health === null)
             {
                 jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./images/mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
             }
+            // otherwise display mana cost health and attack
             else
             {
                 jsxModalHP = <>
