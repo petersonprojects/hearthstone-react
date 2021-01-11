@@ -38,12 +38,16 @@ img{
     height:310px;
     width:260px;
     transition-duration: 0.5s;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 img:hover{
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
+    /* -webkit-transform: scale(1.1);
+    transform: scale(1.1); */
     transition-duration: 0.5s;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1.1);
+    transform: translateZ(0) scale(1.1);
     cursor: pointer;
 }
 

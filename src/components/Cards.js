@@ -62,15 +62,15 @@ const Cards = () => {
         }
 
         // filter out the hero "cards"
-        let filtered = reduxDeck.filter(card => {
-            return card.cardTypeId !== 3 
-        })
+        // let filtered = reduxDeck.filter(card => {
+        //     return card.cardTypeId !== 3 
+        // })
 
         let end = start + 40;
         let newPage = reduxDeck.slice(start, end);
         setPageCards(newPage);
 
-    }, [pageCounter])
+    }, [pageCounter, reduxDeck])
 
 // functions
 
@@ -128,7 +128,7 @@ const Cards = () => {
             setPageCards(reduxDeck.slice(0,40))
         }
 
-    }, [searchResults])
+    }, [searchResults, reduxDeck])
 
     let handleSearch = (e) => {
 
@@ -431,8 +431,6 @@ const Cards = () => {
         else{
             return null;
         }
-
-
     }
 
 
@@ -478,7 +476,7 @@ const Cards = () => {
                     <Button id="classButton" style={{backgroundColor:'#bcac9b'}} size="sm" data-filter={12} onClick={handleClass}>Neutral</Button>
                 </Row>
 
-                <Row className="justify-content-center">
+                <Row className="justify-content-center mx-4">
                     {loadView()}
                 </Row>
 
