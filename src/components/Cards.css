@@ -73,14 +73,18 @@ img:hover{
     color: black;
     margin-left: 7px;
     margin-top: 7px;
-    transition-duration: 0.5s;
+    transition: 0.5s;
     border: 1px solid black;
 }
 
 #classButton:hover{
-    -webkit-transform: scale(1.08);
-    transform: scale(1.08);
-    transition-duration: 0.5s;
+    transition: 0.5s;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1.05);
+    transform: translateZ(0) scale(1.05);
+    /* font-smoothing: antialiased !important; */
+    -webkit-filter: blur(0);
+    cursor: pointer;
 }
 
 #scrollTop {
