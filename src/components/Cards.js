@@ -39,15 +39,33 @@ const Cards = () => {
     // acts like a component did mount
     useEffect(()=>{
 
-        // if all the cards are not in the redux state, then dispatch loadCards action (redux thunk)
-        if(reduxDeck.length < 2662)
-        {
-            dispatch(loadCards())
+        async function getCards() {
+
+            let accessToken;
+            // first make a call to localhost:3000/api to receive an oauth token as a response
+    
+            await fetch('http://localhost:3000/api')
+            .then(res => res.json())
+            .then(data => {
+                console.log(data.aToken)
+                accessToken = data.aToken
+                
+            })
+            .catch(err => console.log(err))
+
+            console.log(reduxDeck)
+            if(reduxDeck.length < 2810)
+            {
+                dispatch(loadCards(accessToken))
+            }
+
         }
 
-  
+        getCards()
 
-    })
+        // if all the cards are not in the redux state, then dispatch loadCards action (redux thunk)
+
+    }, [reduxDeck.length])
 
     // rerenders the page with specific array items when the page number is altered
     useEffect(()=>{
@@ -267,7 +285,7 @@ const Cards = () => {
     let triggerModal = (e) => {
 
         setCardID(e.target.id)
-
+        console.log(e.target.id)
         openModal()
 
     }
@@ -277,31 +295,44 @@ const Cards = () => {
     }
 
     let showSets = async () => {
-        let accessToken;
-        // first make a call to localhost:3000/api to receive an oauth token as a response
+        // let accessToken;
+        // // first make a call to localhost:3000/api to receive an oauth token as a response
 
-        await fetch('http://localhost:3000/api')
-        .then(res => res.json())
-        .then(data => {
-            console.log(data.aToken)
-            accessToken = data.aToken
+        // await fetch('http://localhost:3000/api')
+        // .then(res => res.json())
+        // .then(data => {
+        //     console.log(data.aToken)
+        //     accessToken = data.aToken
+        // })
+        // .catch(err => console.log(err))
+
+        // let setCards = [];
+
+        // for(let i = 1; i < 5;i++)
+        // {
+        //     await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&set=madness-at-the-darkmoon-faire&page=${i}&access_token=${accessToken}`)
+        //     .then((res)=> res.json())
+        //     .then(data => {
+        //         console.log(data.cards)
+        //         setCards.push(...data.cards)
+        //     })
+        // }
+
+        // this is needed because our original function loadCards() is not loading all of the cards into the redux deck
+        // setCards.forEach(setCard => {
+
+        //     if(!reduxDeck.includes(setCard))
+        //     {
+        //         reduxDeck.push(setCard)
+        //     }
+
+        // })
+
+        // console.log(reduxDeck)
+
+        let setCards = reduxDeck.filter(card => {
+            return card.cardSetId === 1466
         })
-        .catch(err => console.log(err))
-
-        let setCards = [];
-
-        for(let i = 1; i < 5;i++)
-        {
-            await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&set=madness-at-the-darkmoon-faire&page=${i}&access_token=${accessToken}`)
-            .then((res)=> res.json())
-            .then(data => {
-                console.log(data.cards)
-                setCards.push(...data.cards)
-
-
-            })
-        }
-
 
         console.log(setCards)
 
@@ -311,19 +342,33 @@ const Cards = () => {
     let generateUniqueModal = () => {
 
         let score = 0;
-
+        // console.log(reduxDeck)
         let singleCard = reduxDeck.filter(card => {
 
             return card.slug === cardID
+        })
+
+        let testing = reduxDeck.filter(card => {
+            return card.cardSetId === 1466
         })
 
         // calculate score here based on health, attack, manaCost and effects
 
         if(isOpen === true)
         {
+            let health;
+            let attack;
+            if(singleCard[0].health)
+            {
+                health = parseInt(singleCard[0].health);
+                attack = parseInt(singleCard[0].attack);
+            }
+            else
+            {
+                health = 0;
+                attack = 0;
+            }
 
-            let health = parseInt(singleCard[0].health);
-            let attack = parseInt(singleCard[0].attack);
             let mana = parseInt(singleCard[0].manaCost);
 
             let bgc = 'white';
@@ -400,6 +445,15 @@ const Cards = () => {
                 <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./images/health.png" alt="hi"/> {singleCard[0].health}</Modal.Title></>
             }
 
+            let setName = "";
+
+            if(singleCard[0].cardSetId === 1466)
+            {
+                setName = "Madness at the Darkmoon Faire"
+            }
+
+            // start of modal
+
             return <Modal style={{fontFamily:'Belwe'}} show={isOpen} onHide={closeModal}>
 
             <Modal.Header>
@@ -408,8 +462,11 @@ const Cards = () => {
                     <img style={{height:'80px', width: '400px', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
                 </Col>
 
-                <Col className="d-flex justify-content-center mb-0 mt-3" lg={12}>
-                    <Modal.Title style={{marginLeft:'10px'}}>{singleCard[0].name}</Modal.Title>
+                <Col className="d-flex justify-content-start mb-0 mt-3" lg={12}>
+                    <Modal.Title style={{marginLeft:'10px'}}>
+                        {singleCard[0].name}
+                        <Row className="d-flex justify-content-start align-items-center" style={{marginTop:'-10px',marginLeft: '0px', color:'black', fontSize:'20px'}}><i>{setName}</i></Row>
+                    </Modal.Title>
                 </Col>
 
                 <Col xl={12}>
@@ -427,9 +484,11 @@ const Cards = () => {
     
             <Modal.Body id="modalBod">
 
+
             <Row className="align-items-center">
 
                 <Col className="d-flex justify-content-end" xl={8} lg={8} md={8} sm={8} xs={8}>Raw Score (1-10) </Col>
+
                 <Col xl={4} lg={4} md={4} sm={4} xs={4}>
                     <img style={{height:'50px', width:'50px'}} src="./images/score.png" alt="score"></img>
                     {score}
@@ -453,7 +512,7 @@ const Cards = () => {
                         <i style={{fontFamily: 'Belwe', fontSize:'0.7em'}}>{singleCard[0].flavorText}</i>
                     </Col>
                     <Col className="d-flex justify-content-center" xl={12} lg={12} md={12} sm={12} xs={12}>
-                        <Button id="add" onClick={addToCollection} variant="outline-info">+Add to collection</Button>
+                        <Button id="add" onClick={addToCollection} variant="outline-info">+ add to collection</Button>
                     </Col>
 
                 </Row>
@@ -470,7 +529,7 @@ const Cards = () => {
 
 
     // if the entire redux deck has been loaded in, then load the cards
-    return reduxDeck.length > 2662 ? (
+    return reduxDeck.length > 2800 ? (
         <>
 
             <Container fluid>
@@ -493,7 +552,7 @@ const Cards = () => {
 
                 </Row>
 
-                <Button onClick={showSets}>Sets</Button>
+                <Button onClick={showSets}>Madness at the Darkmoon Faire</Button>
                 {/*filtering buttons can go here*/}
 
                 <Row className="mt-3 mb-3 justify-content-center">
