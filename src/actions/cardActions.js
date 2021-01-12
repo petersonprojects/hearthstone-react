@@ -31,6 +31,7 @@ export const loadCards = () => {
             let cards = [];
             let mult = 1;
 
+
             for(let page = 1;page <= 71;page++)
             {
                 let response = await axios.get(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&page=${page}&access_token=${accessToken}`)

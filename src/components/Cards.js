@@ -45,6 +45,8 @@ const Cards = () => {
             dispatch(loadCards())
         }
 
+  
+
     })
 
     // rerenders the page with specific array items when the page number is altered
@@ -274,6 +276,38 @@ const Cards = () => {
         // stretch goal
     }
 
+    let showSets = async () => {
+        let accessToken;
+        // first make a call to localhost:3000/api to receive an oauth token as a response
+
+        await fetch('http://localhost:3000/api')
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.aToken)
+            accessToken = data.aToken
+        })
+        .catch(err => console.log(err))
+
+        let setCards = [];
+
+        for(let i = 1; i < 5;i++)
+        {
+            await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&set=madness-at-the-darkmoon-faire&page=${i}&access_token=${accessToken}`)
+            .then((res)=> res.json())
+            .then(data => {
+                console.log(data.cards)
+                setCards.push(...data.cards)
+
+
+            })
+        }
+
+
+        console.log(setCards)
+
+        setPageCards(setCards)
+    }
+
     let generateUniqueModal = () => {
 
         let score = 0;
@@ -459,7 +493,7 @@ const Cards = () => {
 
                 </Row>
 
-
+                <Button onClick={showSets}>Sets</Button>
                 {/*filtering buttons can go here*/}
 
                 <Row className="mt-3 mb-3 justify-content-center">
