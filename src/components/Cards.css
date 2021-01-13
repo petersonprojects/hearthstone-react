@@ -37,19 +37,50 @@
 img{
     height:310px;
     width:260px;
-    transition-duration: 0.5s;
     image-rendering: -webkit-optimize-contrast;
+    transition-duration: 0.4s;
 }
 
 img:hover{
-    /* -webkit-transform: scale(1.1);
-    transform: scale(1.1); */
+
     transition-duration: 0.5s;
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(0) scale(1.1);
     transform: translateZ(0) scale(1.1);
     cursor: pointer;
 }
+
+.fade-in {
+    animation: fadeIn ease 1.8s;
+    -webkit-animation: fadeIn ease 1.8s;
+    -moz-animation: fadeIn ease 1.8s;
+    -o-animation: fadeIn ease 1.8s;
+    -ms-animation: fadeIn ease 1.8s;
+}
+    @keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+    }
+    
+    @-moz-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+    }
+    
+    @-webkit-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+    }
+    
+    @-o-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+    }
+    
+    @-ms-keyframes fadeIn {
+    0% {opacity:0;}
+    100% {opacity:1;}
+    }
 
 #pageNumber{
     font-family: "Belwe";
@@ -82,7 +113,6 @@ img:hover{
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(0) scale(1.05);
     transform: translateZ(0) scale(1.05);
-    /* font-smoothing: antialiased !important; */
     -webkit-filter: blur(0);
     cursor: pointer;
 }
@@ -103,15 +133,6 @@ img:hover{
 
 #scrollTop:hover{
 opacity: 1;
-}
-
-@keyframes fadeIn {
-0% {
-    opacity: 0;
-}
-100% {
-    opacity: 0.5;
-}
 }
 
 

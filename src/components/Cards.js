@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import SingleCard from './SingleCard';
 import { Row, Container, Button, Col, Form, FormControl, Modal } from 'react-bootstrap';
@@ -12,20 +11,28 @@ const Cards = () => {
     let title = null;
     let pageJSX = null;
 
-    const totalPages = 71;
-
     // array of all cards in global state
     const reduxDeck = useSelector(state => state.cards);
     const dispatch = useDispatch();
 
-    // const [myCollection, setMyCollection] = useState([]);
+    // stateful variables
+    const [mageCards, setMageCards] = useState([])
 
-    // the counter that changes with page click
-    // the counter that displays what cards being shown in array (42-82)
-    // the counter used to load all 68 pages of cards
+    let getMageCards = () => {
+
+        let mage = reduxDeck.filter(card => {
+            return card.classId === 4
+        })
+
+        return mage
+    }
+
+    // const [myCollection, setMyCollection] = useState([]);
 
     const [pageCounter, setCounter] = useState(1);
     const [localStart, setLocal] = useState(1);
+
+    const [metaData, setMetaData] = useState([]);
 
     const [cards, setPageCards] = useState([]);
     const [currentTitle, setCurrentTitle] = useState('All')
@@ -33,25 +40,58 @@ const Cards = () => {
     const [searchResults, setSearchResults] = useState('');
 
     const [isOpen, setIsOpen] = useState(false);
+    // used to render specified modal
     const [cardID, setCardID] = useState('');
 
 
-    // acts like a component did mount
+    let getToken = async () => {
+
+        let token;
+        await fetch('http://localhost:3000/api')
+        .then(res => res.json())
+        .then(data => {
+            console.log(`Inside of getToken: ${data.aToken}`)
+            token = data.aToken
+
+        })
+        .catch(err => console.log(err))
+
+        return token
+
+    }
+
+    let getMetaData = async () => {
+
+        let accessToken = await getToken();
+        // first make a call to localhost:3000/api to receive an oauth token as a response
+
+        await fetch(`https://us.api.blizzard.com/hearthstone/metadata?locale=en_US&type=sets&access_token=${accessToken}`)
+        .then(res => res.json())
+        .then(data => {
+            metaData.push(...data.sets)
+            console.log(metaData)
+        })
+        .catch(err => console.log(err))
+    }
+
+
+    // component did mount
+
+    useEffect(()=> {
+
+        getMetaData()
+        let mage = getMageCards()
+        mageCards.push(...mage)
+
+    }, [])
+
     useEffect(()=>{
 
         async function getCards() {
 
-            let accessToken;
+            let accessToken = await getToken();
             // first make a call to localhost:3000/api to receive an oauth token as a response
-    
-            await fetch('http://localhost:3000/api')
-            .then(res => res.json())
-            .then(data => {
-                console.log(data.aToken)
-                accessToken = data.aToken
-                
-            })
-            .catch(err => console.log(err))
+            // if all the cards are not in the redux state, then dispatch loadCards action (redux thunk)
 
             console.log(reduxDeck)
             if(reduxDeck.length < 2810)
@@ -63,9 +103,10 @@ const Cards = () => {
 
         getCards()
 
-        // if all the cards are not in the redux state, then dispatch loadCards action (redux thunk)
 
-    }, [reduxDeck.length])
+
+    }, [reduxDeck.length, dispatch, reduxDeck])
+
 
     // rerenders the page with specific array items when the page number is altered
     useEffect(()=>{
@@ -81,28 +122,83 @@ const Cards = () => {
             start = (pageCounter * 40)-40;
         }
 
-        // filter out the hero "cards"
-        // let filtered = reduxDeck.filter(card => {
-        //     return card.cardTypeId !== 3 
-        // })
-
         let end = start + 40;
         let newPage = reduxDeck.slice(start, end);
-        setPageCards(newPage);
+
+        if(searchResults === '')
+        {
+            setPageCards(newPage);
+        }
+        else
+        {
+            let filteredList;
+            console.log(searchResults)
+
+            filteredList = reduxDeck.filter(card => {
+                return card.name.toLowerCase().includes(searchResults.toLowerCase())
+            })
+
+            newPage = filteredList.slice(start, end);
+
+            setPageCards(newPage);
+        }
+
 
     }, [pageCounter, reduxDeck])
 
-// functions
+    useEffect(()=> {
+
+        let start;
+
+        if(pageCounter === 1)
+        {
+            start = 0;
+        }
+        else
+        {
+            start = (pageCounter * 40)-40;
+        }
+
+        let end = start + 40;
+
+        
+        if(searchResults !== ''){
+            let filteredList;
+            console.log(searchResults)
+ 
+                filteredList = reduxDeck.filter(card => {
+                    return card.name.toLowerCase().includes(searchResults.toLowerCase())
+                })
+
+                let newPage = filteredList.slice(start, end);
+
+                setPageCards(newPage);
+    
+                // setPageCards(filteredList)
+
+        }
+        else if(searchResults === '' || searchResults === undefined){
+
+            setPageCards(reduxDeck.slice(0, 40))
+
+        }
+
+    }, [searchResults])
+
+
+
+
+    // functions
+
+
+
 
     const scrollTop = () => {
-
         window.scrollTo({top: 0, behavior: 'smooth'});
-
     }
-
     let handleNext = () => {
-
         setCounter(pageCounter + 1);
+        console.log(pageCounter)
         setLocal(localStart + 41);
         scrollTop()
     }
@@ -119,50 +215,26 @@ const Cards = () => {
 
     let handleClass = (e) => {
 
-            const classToShow = reduxDeck.filter(card => {
-                return card.classId === parseInt(e.target.dataset.filter)
-            })
+        setCounter(1)
 
-            setPageCards(classToShow)
-            setCurrentTitle(e.target.innerHTML)
+        console.log(mageCards)
+
+        const classToShow = reduxDeck.filter(card => {
+            return card.classId === parseInt(e.target.dataset.filter)
+        })
+
+        setPageCards(classToShow)
+        setCurrentTitle(e.target.innerHTML)
 
     }
 
-    useEffect(()=> {
-        
-        if(searchResults !== ''){
-            let filteredList;
-            console.log(searchResults)
-    
-            if(searchResults !== '')
-            {
-                filteredList = reduxDeck.filter(card => {
-                    return card.name.toLowerCase().includes(searchResults.toLowerCase())
-                })
-    
-                setPageCards(filteredList)
-            }
 
-        }
-        else if(searchResults === '' || searchResults === undefined){
-            setPageCards(reduxDeck.slice(0,40))
-        }
-
-    }, [searchResults, reduxDeck])
 
     let handleSearch = (e) => {
 
-        var key = e.keyCode || e.charCode;
+        setCounter(1)
 
-        if( key === 8 ){
-            //backspace pressed do nothing
-            setSearchResults('')
-        }
-
-        else if(key !== 8)
-        {
-            setSearchResults(e.target.value)
-        }
+        setSearchResults(e.target.value)
 
     }
 
@@ -173,30 +245,33 @@ const Cards = () => {
         let input = document.getElementById('search');
         input.value = '';
 
+        let start;
+
+        if(pageCounter === 1)
+        {
+            start = 0;
+        }
+        else
+        {
+            start = (pageCounter * 40)-40;
+        }
+    
+        let end = start + 40;
+
         if(cards.length <= 40)
         {
-            let start;
 
-            if(pageCounter === 1)
-            {
-                start = 0;
-            }
-            else
-            {
-                start = (pageCounter * 40)-40;
-            }
     
             // filter out the hero "cards"
             let filtered = reduxDeck.filter(card => {
                 return card.cardTypeId !== 3 
             })
-    
-            let end = start + 40;
+
             let newPage = filtered.slice(start, end);
             setPageCards(newPage);
         }
         else{
-            setPageCards(cards)
+            setPageCards(cards.slice(start,end))
         }
 
     }
@@ -222,15 +297,18 @@ const Cards = () => {
 
         // display the total class cards 
 
-        if(cards.length > 40)
+        if(currentTitle === 'All')
         {
+
             title =  <Row className="justify-content-center">
-            <h1 id="cardsHeader" className="mb-0 mt-5">{currentTitle} ({cards.length})</h1>
+            <h1 id="cardsHeader" className="mb-0 mt-5">{currentTitle} ({reduxDeck.length})</h1>
             </Row>
         }
+
+
         else{
             title =  <Row className="justify-content-center">
-            <h1 id="cardsHeader" className="mb-0 mt-5"> Page {pageCounter} of {totalPages}</h1>
+            <h1 id="cardsHeader" className="mb-0 mt-5">{currentTitle} ({cards.length})</h1>
         </Row>
         }
 
@@ -239,7 +317,7 @@ const Cards = () => {
 
     let loadPageButtons = () => {
 
-        if(cards.length <= 40)
+        if(cards.length >= 40)
         {
             pageJSX = <Row className="mt-0 pt-0">
 
@@ -348,10 +426,6 @@ const Cards = () => {
             return card.slug === cardID
         })
 
-        let testing = reduxDeck.filter(card => {
-            return card.cardSetId === 1466
-        })
-
         // calculate score here based on health, attack, manaCost and effects
 
         if(isOpen === true)
@@ -434,23 +508,29 @@ const Cards = () => {
             // if the card is a spell and not a minion, jsut display its mana cost in the modal
             if(singleCard[0].health === undefined || singleCard[0].health === null)
             {
-                jsxModalHP =  <Modal.Title><img style={{height:'50px', width:'50px'}} src="./images/mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
+                jsxModalHP =  <Modal.Title><img style={{height:'60px', width:'60px'}} src="./images/mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
             }
             // otherwise display mana cost health and attack
             else
             {
                 jsxModalHP = <>
-                <Modal.Title><img style={{height:'60px', width:'50px'}} src="./images/mana_crystal.png" alt="hi"/> {singleCard[0].manaCost}</Modal.Title>
-                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./images/attack.png" alt="hi"/> {singleCard[0].attack}</Modal.Title>
-                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px'}} src="./images/health.png" alt="hi"/> {singleCard[0].health}</Modal.Title></>
+                <Modal.Title><img style={{height:'60px', width:'60px'}} src="./images/mana_crystal.png" alt="hi"/>{singleCard[0].manaCost}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'50px', marginLeft:'40px', marginRight: '5px'}} src="./images/attack.png" alt="hi"/>{singleCard[0].attack}</Modal.Title>
+                <Modal.Title><img style={{height:'60px', width:'45px', marginLeft:'40px', marginRight: '5px'}} src="./images/health.png" alt="hi"/>{singleCard[0].health}</Modal.Title></>
             }
 
             let setName = "";
 
-            if(singleCard[0].cardSetId === 1466)
-            {
-                setName = "Madness at the Darkmoon Faire"
-            }
+            // loop through metaData and match the card set ID to the setName
+
+            metaData.forEach(setObject => {
+
+                if(singleCard[0].cardSetId === setObject.id)
+                {
+                    setName = setObject.name
+                }
+            })
+
 
             // start of modal
 
@@ -459,13 +539,13 @@ const Cards = () => {
             <Modal.Header>
             <Row className="justify-content-center">
                 <Col className="d-flex justify-content-center">
-                    <img style={{height:'80px', width: '400px', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
+                    <img style={{height:'80px', width: '100%', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
                 </Col>
 
                 <Col className="d-flex justify-content-start mb-0 mt-3" lg={12}>
-                    <Modal.Title style={{marginLeft:'10px'}}>
+                    <Modal.Title style={{marginLeft:'10px', lineHeight:'100%'}}>
                         {singleCard[0].name}
-                        <Row className="d-flex justify-content-start align-items-center" style={{marginTop:'-10px',marginLeft: '0px', color:'black', fontSize:'20px'}}><i>{setName}</i></Row>
+                        <Row className="d-flex justify-content-start align-items-center" style={{marginTop:'-5px',marginLeft: '0px', color:'black', fontSize:'20px'}}><i>{setName}</i></Row>
                     </Modal.Title>
                 </Col>
 
@@ -482,24 +562,22 @@ const Cards = () => {
 
             </Modal.Header>
     
-            <Modal.Body id="modalBod">
+            <Modal.Body id="modalBod" style={{backgroundColor: '#edf2f4'}}>
 
 
-            <Row className="align-items-center">
+            <Row className="align-items-center justify-content-center">
 
-                <Col className="d-flex justify-content-end" xl={8} lg={8} md={8} sm={8} xs={8}>Raw Score (1-10) </Col>
-
-                <Col xl={4} lg={4} md={4} sm={4} xs={4}>
-                    <img style={{height:'50px', width:'50px'}} src="./images/score.png" alt="score"></img>
-                    {score}
+                <Col className="d-flex justify-content-center align-items-center" xl={12} lg={12} md={12} sm={12} xs={12} style={{fontSize:'100px'}}>
+                    <img style={{height:'75px', width:'75px'}} src="./images/score.png" alt="score"></img>
+                    {score}<span style={{fontSize:'15px'}}>/10</span>
                 </Col>
 
             </Row>
 
-            <Row className="justify-content-center ml-4 mr-4" style={{fontSize:'0.3em'}}>
+            {/* <Row className="justify-content-center ml-4 mr-4" style={{fontSize:'0.3em'}}>
                 Raw Score is calculated based on mana cost, health, attack, rarity and card text. Creating a deck based only off of high raw scores is not a good idea. It is merely a data point used
                 to steer you in the right direction, but it is up to you to decide the synergy of your deck!
-            </Row>
+            </Row> */}
 
 
             </Modal.Body>
@@ -508,10 +586,10 @@ const Cards = () => {
 
                 <Row className="justify-content-center">
 
-                    <Col className="d-flex justify-content-center mb-4" xl={12} lg={12} md={12} sm={12} xs={12}>
+                    <Col className="d-flex justify-content-center text-center mb-4" xl={12} lg={12} md={12} sm={12} xs={12}>
                         <i style={{fontFamily: 'Belwe', fontSize:'0.7em'}}>{singleCard[0].flavorText}</i>
                     </Col>
-                    <Col className="d-flex justify-content-center" xl={12} lg={12} md={12} sm={12} xs={12}>
+                    <Col className="d-flex justify-content-center"  xl={12} lg={12} md={12} sm={12} xs={12}>
                         <Button id="add" onClick={addToCollection} variant="outline-info">+ add to collection</Button>
                     </Col>
 
@@ -543,7 +621,7 @@ const Cards = () => {
 
                     <Col xl={6} lg={6} md={6} sm={6} xs={6} className="d-flex justify-content-end ml-2 mr-0 pr-0">
                         <Form >
-                            <FormControl autoComplete="off" id="search" onChange={handleSearch} style={{fontSize:'0.7em', fontFamily:'Belwe'}} type="text" placeholder="Search all cards" className="mr-2" />
+                            <FormControl autoComplete="off" id="search" onKeyUp={handleSearch} style={{fontSize:'0.7em', fontFamily:'Belwe'}} type="text" placeholder="Search all cards" className="mr-2" />
                         </Form>
                     </Col>
                     <Col xl={5} lg={5} md={5} sm={5} xs={5} className="d-flex justify-content-start ml-0 pl-0">
@@ -569,7 +647,7 @@ const Cards = () => {
                     <Button id="classButton" style={{backgroundColor:'#bcac9b'}} size="sm" data-filter={12} onClick={handleClass}>Neutral</Button>
                 </Row>
 
-                <Row className="justify-content-center mx-4">
+                <Row className="justify-content-center align-items-center mx-4">
                     {loadView()}
                 </Row>
 

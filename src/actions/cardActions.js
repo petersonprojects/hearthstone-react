@@ -17,17 +17,8 @@ export const loadCards = (accessToken) => {
 
             // api calls
             let cards = [];
-            // let setCards = [];
+
             let mult = 1;
-
-            // for(let i = 1; i< 5; i++)
-            // {
-            //     let response = await axios.get(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&set=madness-at-the-darkmoon-faire&page=${i}&access_token=${accessToken}`)
-
-            //     setCards.push(...response.data.cards);
-            // }
-
-
 
             for(let page = 1;page <= 72;page++)
             {
