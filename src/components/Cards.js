@@ -27,7 +27,6 @@ const Cards = () => {
             paladin: [],
             shaman: [],
             rogue: [],
-            mage: [],
             warlock: [],
             warrior: [],
             hunter: [],
@@ -70,7 +69,7 @@ const Cards = () => {
     const [pageCounter, setCounter] = useState(1);
     const [localStart, setLocal] = useState(1);
 
-    const [metaData, setMetaData] = useState([]);
+    const [metaData] = useState([]);
 
     const [cards, setPageCards] = useState([]);
     const [currentTitle, setCurrentTitle] = useState('All')
@@ -185,7 +184,7 @@ const Cards = () => {
                 {
                     setPageCards(classCards.hunter.slice(start,end))
                 }
-                if(classToShow === "demonHunter")
+                if(classToShow === "demon hunter")
                 {
                     setPageCards(classCards.demonHunter.slice(start,end))
                 }
@@ -338,12 +337,14 @@ const Cards = () => {
         setCounter(1)
 
         setSearchResults(e.target.value)
+        setCurrentTitle(e.target.value)
 
     }
 
     let handleClear = (e) => {
         
         setSearchResults('')
+        setCurrentTitle('All')
 
         let input = document.getElementById('search');
         input.value = '';
@@ -400,9 +401,8 @@ const Cards = () => {
 
         // display the total class cards 
 
-        if(currentTitle === 'All')
+        if(currentTitle === 'All' || currentTitle === '')
         {
-
             title =  <Row className="justify-content-center">
             <h1 id="cardsHeader" className="mb-0 mt-5">{currentTitle} ({reduxDeck.length})</h1>
             </Row>
@@ -419,6 +419,8 @@ const Cards = () => {
     }
 
     let loadPageButtons = () => {
+
+        let leftButton = null;
 
         if(cards.length >= 40)
         {
@@ -440,11 +442,25 @@ const Cards = () => {
         }
         else{
 
-            pageJSX = <Row className="mt-0 pt-0">
+            if(pageCounter === 1)
+            {
+                leftButton = null;
+            }
+            else
+            {
+                leftButton = <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
+            }
 
+            pageJSX = <Row className="mt-0 pt-0">
+                <Col className="d-flex justify-content-center">
+                    {leftButton}
+             </Col>
             <Col className="d-flex justify-content-center">
                 <p id="pageNumber">That's it!</p>
             </Col>
+            <Col className="d-flex justify-content-center">
+                    
+                </Col>
 
             </Row>
         }
@@ -634,10 +650,16 @@ const Cards = () => {
                 }
             })
 
+            let card = reduxDeck.filter(card => {
+                return card.slug === cardID
+            })
+
+            let cardImage = card[0].image
+
 
             // start of modal
 
-            return <Modal style={{fontFamily:'Belwe'}} show={isOpen} onHide={closeModal}>
+            return <Modal className="backgroundStyle" style={{fontFamily:'Belwe', backgroundImage:`url(${cardImage})`}} show={isOpen} onHide={closeModal}>
 
             <Modal.Header>
             <Row className="justify-content-center">

@@ -29,6 +29,10 @@
     src: url("./layout/Belwe.ttf") format("truetype");
 }
 
+body{
+    line-height: normal;
+}
+
 #cardsHeader{
     font-family: "Belwe";
     font-size: 1.5em;
@@ -36,7 +40,7 @@
 
 img{
     height:310px;
-    width:260px;
+    width:250px;
     image-rendering: -webkit-optimize-contrast;
     transition-duration: 0.4s;
 }
@@ -133,6 +137,12 @@ img:hover{
 
 #scrollTop:hover{
 opacity: 1;
+}
+
+.backgroundStyle {
+
+    background-repeat: no-repeat;
+    background-position: 0em;
 }
 
 
