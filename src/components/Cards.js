@@ -16,15 +16,53 @@ const Cards = () => {
     const dispatch = useDispatch();
 
     // stateful variables
-    const [mageCards, setMageCards] = useState([])
+    const [classCards, setClassCards] = useState([])
+    const [classToShow, setClassToShow] = useState('')
+    const [showingClass, setShowingClass] = useState(false)
 
-    let getMageCards = () => {
+    let getClassCards = () => {
 
-        let mage = reduxDeck.filter(card => {
-            return card.classId === 4
-        })
+        let classObj = {
+            mage: [],
+            paladin: [],
+            shaman: [],
+            rogue: [],
+            mage: [],
+            warlock: [],
+            warrior: [],
+            hunter: [],
+            druid: [],
+            priest: [],
+            demonHunter: [],
+            neutral: []
+        };
+        
+        let mage = reduxDeck.filter(card =>  card.classId === 4)
+        let druid = reduxDeck.filter(card => card.classId === 2)
+        let hunter = reduxDeck.filter(card => card.classId === 3)
+        let paladin = reduxDeck.filter(card => card.classId === 5)
+        let priest = reduxDeck.filter(card =>  card.classId === 6)
+        let rogue = reduxDeck.filter(card => card.classId === 7)
+        let shaman = reduxDeck.filter(card => card.classId === 8)
+        let warlock = reduxDeck.filter(card => card.classId === 9)
+        let warrior = reduxDeck.filter(card => card.classId === 10)
+        let demonHunter = reduxDeck.filter(card => card.classId === 14)
+        let neutral = reduxDeck.filter(card => card.classId === 12)
 
-        return mage
+        classObj.mage.push(...mage)
+        console.log(classObj.mage)
+        classObj.druid.push(...druid)
+        classObj.hunter.push(...hunter)
+        classObj.paladin.push(...paladin)
+        classObj.priest.push(...priest)
+        classObj.rogue.push(...rogue)
+        classObj.shaman.push(...shaman)
+        classObj.warlock.push(...warlock)
+        classObj.warrior.push(...warrior)
+        classObj.demonHunter.push(...demonHunter)
+        classObj.neutral.push(...neutral)
+
+        return classObj;
     }
 
     // const [myCollection, setMyCollection] = useState([]);
@@ -65,7 +103,7 @@ const Cards = () => {
         let accessToken = await getToken();
         // first make a call to localhost:3000/api to receive an oauth token as a response
 
-        await fetch(`https://us.api.blizzard.com/hearthstone/metadata?locale=en_US&type=sets&access_token=${accessToken}`)
+        await fetch(`https://us.api.blizzard.com/hearthstone/metadata?locale=en_US&access_token=${accessToken}`)
         .then(res => res.json())
         .then(data => {
             metaData.push(...data.sets)
@@ -80,8 +118,8 @@ const Cards = () => {
     useEffect(()=> {
 
         getMetaData()
-        let mage = getMageCards()
-        mageCards.push(...mage)
+        let classObj = getClassCards()
+        setClassCards(classObj)
 
     }, [])
 
@@ -111,6 +149,8 @@ const Cards = () => {
     // rerenders the page with specific array items when the page number is altered
     useEffect(()=>{
 
+        console.log(classToShow)
+
         let start;
 
         if(pageCounter === 1)
@@ -127,7 +167,58 @@ const Cards = () => {
 
         if(searchResults === '')
         {
-            setPageCards(newPage);
+            if(showingClass === false)
+            {
+                setPageCards(newPage);
+            }
+            else
+            {
+                if(classToShow === "mage")
+                {
+                    setPageCards(classCards.mage.slice(start,end))
+                }
+                if(classToShow === "druid")
+                {
+                    setPageCards(classCards.druid.slice(start,end))
+                }
+                if(classToShow === "hunter")
+                {
+                    setPageCards(classCards.hunter.slice(start,end))
+                }
+                if(classToShow === "demonHunter")
+                {
+                    setPageCards(classCards.demonHunter.slice(start,end))
+                }
+                if(classToShow === "priest")
+                {
+                    setPageCards(classCards.priest.slice(start,end))
+                }
+                if(classToShow === "paladin")
+                {
+                    setPageCards(classCards.paladin.slice(start,end))
+                }
+                if(classToShow === "rogue")
+                {
+                    setPageCards(classCards.rogue.slice(start,end))
+                }
+                if(classToShow === "shaman")
+                {
+                    setPageCards(classCards.shaman.slice(start,end))
+                }
+                if(classToShow === "warlock")
+                {
+                    setPageCards(classCards.warlock.slice(start,end))
+                }
+                if(classToShow === "warrior")
+                {
+                    setPageCards(classCards.warrior.slice(start,end))
+                }
+                if(classToShow === "neutral")
+                {
+                    setPageCards(classCards.neutral.slice(start,end))
+                }
+            }
+
         }
         else
         {
@@ -216,14 +307,26 @@ const Cards = () => {
     let handleClass = (e) => {
 
         setCounter(1)
+        setClassToShow(e.target.innerHTML.toLowerCase())
+        console.log(e.target.innerHTML.toLowerCase())
+        console.log(classToShow)
+        // console.log(mageCards)
 
-        console.log(mageCards)
+        // const classToShow = reduxDeck.filter(card => {
+        //     return card.classId === parseInt(e.target.dataset.filter)
+        // })
+        // console.log(classCards.mage)
 
-        const classToShow = reduxDeck.filter(card => {
-            return card.classId === parseInt(e.target.dataset.filter)
-        })
 
-        setPageCards(classToShow)
+        let myVar = e.target.innerHTML.toLowerCase()
+        if(e.target.innerHTML === "Demon Hunter")
+        {
+            myVar = "demonHunter"
+        }
+
+        let toSlice = classCards[myVar].slice(0,40)
+        setPageCards(toSlice)
+        setShowingClass(true)
         setCurrentTitle(e.target.innerHTML)
 
     }
