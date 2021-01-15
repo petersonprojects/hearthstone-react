@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Cards from './components/Cards';
 import Heroes from './components/Heroes';
+import Battlegrounds from './components/Battlegrounds';
 // import Feature from './components/Feature';
 // import Signin from './components/auth/Singin';
 // import Signout from './components/auth/Signout';
@@ -65,6 +66,7 @@ ReactDOM.render(
 
           <Route exact path='/' component={App}/>
           <Route path='/cards' component={Cards}/>
+          <Route path='/battlegrounds' component={Battlegrounds}/>
           <Route path='/heroes' component={Heroes}/>
           {/* <Route path ='/signup' component = {Signup}/>
           <Route path ='/feature' component = {Feature}/>
