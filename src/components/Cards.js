@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SingleCard from './SingleCard';
+import UniqueModal from './UniqueModal';
 import { Row, Container, Button, Col, Form, FormControl, Modal } from 'react-bootstrap';
 import './Cards.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -232,57 +233,35 @@ const Cards = () => {
 
             setPageCards(newPage);
         }
-
-
-    }, [pageCounter, reduxDeck])
+    }, [pageCounter, reduxDeck, classCards])
 
     useEffect(()=> {
 
         let start;
-
-        if(pageCounter === 1)
-        {
-            start = 0;
-        }
-        else
-        {
-            start = (pageCounter * 40)-40;
-        }
-
+        if(pageCounter === 1) { start = 0; }
+        else {start = (pageCounter * 40)-40;}
         let end = start + 40;
 
-        
         if(searchResults !== ''){
             let filteredList;
             console.log(searchResults)
- 
-                filteredList = reduxDeck.filter(card => {
-                    return card.name.toLowerCase().includes(searchResults.toLowerCase())
-                })
 
-                let newPage = filteredList.slice(start, end);
+            filteredList = reduxDeck.filter(card => {
+                return card.name.toLowerCase().includes(searchResults.toLowerCase())
+            })
 
-                setPageCards(newPage);
-    
-                // setPageCards(filteredList)
+            let newPage = filteredList.slice(start, end);
 
+            setPageCards(newPage);
         }
+
         else if(searchResults === '' || searchResults === undefined){
-
             setPageCards(reduxDeck.slice(0, 40))
-
         }
 
     }, [searchResults])
 
-
-
-
     // functions
-
-
-
-
     const scrollTop = () => {
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
@@ -442,42 +421,37 @@ const Cards = () => {
         }
         else{
 
-            if(pageCounter === 1)
-            {
-                leftButton = null;
-            }
+            if(pageCounter === 1) {leftButton = null;}
             else
             {
                 leftButton = <Button id="prevButton" className="mb-4" variant="dark" onClick={handlePrevious}><i className="fa fa-arrow-left" aria-hidden="true"></i></Button>
             }
 
             pageJSX = <Row className="mt-0 pt-0">
-                <Col className="d-flex justify-content-center">
-                    {leftButton}
-             </Col>
-            <Col className="d-flex justify-content-center">
-                <p id="pageNumber">That's it!</p>
-            </Col>
-            <Col className="d-flex justify-content-center">
-                    
-                </Col>
 
-            </Row>
+                        <Col className="d-flex justify-content-center">
+                            {leftButton}
+                        </Col>
+                        <Col className="d-flex justify-content-center">
+                            <p id="pageNumber">That's it!</p>
+                        </Col>
+                        <Col className="d-flex justify-content-center">
+                            
+                        </Col>
+
+                    </Row>
         }
 
         return pageJSX;
     }
 
     let openModal = () => {
-
         setIsOpen(true)
     }
 
     let closeModal = () => {
-
         setIsOpen(false)
     }
-
 
     let triggerModal = (e) => {
 
@@ -492,40 +466,6 @@ const Cards = () => {
     }
 
     let showSets = async () => {
-        // let accessToken;
-        // // first make a call to localhost:3000/api to receive an oauth token as a response
-
-        // await fetch('http://localhost:3000/api')
-        // .then(res => res.json())
-        // .then(data => {
-        //     console.log(data.aToken)
-        //     accessToken = data.aToken
-        // })
-        // .catch(err => console.log(err))
-
-        // let setCards = [];
-
-        // for(let i = 1; i < 5;i++)
-        // {
-        //     await fetch(`https://us.api.blizzard.com/hearthstone/cards?locale=en_US&set=madness-at-the-darkmoon-faire&page=${i}&access_token=${accessToken}`)
-        //     .then((res)=> res.json())
-        //     .then(data => {
-        //         console.log(data.cards)
-        //         setCards.push(...data.cards)
-        //     })
-        // }
-
-        // this is needed because our original function loadCards() is not loading all of the cards into the redux deck
-        // setCards.forEach(setCard => {
-
-        //     if(!reduxDeck.includes(setCard))
-        //     {
-        //         reduxDeck.push(setCard)
-        //     }
-
-        // })
-
-        // console.log(reduxDeck)
 
         let setCards = reduxDeck.filter(card => {
             return card.cardSetId === 1466
@@ -658,78 +598,15 @@ const Cards = () => {
 
 
             // start of modal
+            return <UniqueModal singleCard={singleCard} cardImage={cardImage} 
+                                score={score} bgc={bgc} setName={setName} jsxModalHP={jsxModalHP} 
+                                isOpen={isOpen} closeModal={closeModal}
+                                addToCollection={addToCollection}
+                    />
 
-            return <Modal className="backgroundStyle" style={{fontFamily:'Belwe', backgroundImage:`url(${cardImage})`}} show={isOpen} onHide={closeModal}>
-
-            <Modal.Header>
-            <Row className="justify-content-center">
-                <Col className="d-flex justify-content-center">
-                    <img style={{height:'80px', width: '100%', display: 'block'}} src={singleCard[0].cropImage} alt="cropimage"/>
-                </Col>
-
-                <Col className="d-flex justify-content-start mb-0 mt-3" lg={12}>
-                    <Modal.Title style={{marginLeft:'10px', lineHeight:'100%'}}>
-                        {singleCard[0].name}
-                        <Row className="d-flex justify-content-start align-items-center" style={{marginTop:'-5px',marginLeft: '0px', color:'black', fontSize:'20px'}}><i>{setName}</i></Row>
-                    </Modal.Title>
-                </Col>
-
-                <Col xl={12}>
-                    <hr style={{height:'10px', backgroundColor: bgc}}></hr>
-                </Col>
-
-
-                <br/>
-
-                {jsxModalHP}
-
-            </Row>
-
-            </Modal.Header>
-    
-            <Modal.Body id="modalBod" style={{backgroundColor: '#edf2f4'}}>
-
-
-            <Row className="align-items-center justify-content-center">
-
-                <Col className="d-flex justify-content-center align-items-center" xl={12} lg={12} md={12} sm={12} xs={12} style={{fontSize:'100px'}}>
-                    <img style={{height:'75px', width:'75px'}} src="./images/score.png" alt="score"></img>
-                    {score}<span style={{fontSize:'15px'}}>/10</span>
-                </Col>
-
-            </Row>
-
-            {/* <Row className="justify-content-center ml-4 mr-4" style={{fontSize:'0.3em'}}>
-                Raw Score is calculated based on mana cost, health, attack, rarity and card text. Creating a deck based only off of high raw scores is not a good idea. It is merely a data point used
-                to steer you in the right direction, but it is up to you to decide the synergy of your deck!
-            </Row> */}
-
-
-            </Modal.Body>
-    
-            <Modal.Footer>
-
-                <Row className="justify-content-center">
-
-                    <Col className="d-flex justify-content-center text-center mb-4" xl={12} lg={12} md={12} sm={12} xs={12}>
-                        <i style={{fontFamily: 'Belwe', fontSize:'0.7em'}}>{singleCard[0].flavorText}</i>
-                    </Col>
-                    <Col className="d-flex justify-content-center"  xl={12} lg={12} md={12} sm={12} xs={12}>
-                        <Button id="add" onClick={addToCollection} variant="outline-info">+ add to collection</Button>
-                    </Col>
-
-                </Row>
-
-            </Modal.Footer>
-    
-            </Modal>
         }
-        else{
-            return null;
-        }
-    }
-
-
+        else {return null;}
+    } // end of generateUniqueModal
 
     // if the entire redux deck has been loaded in, then load the cards
     return reduxDeck.length > 2800 ? (
@@ -755,8 +632,7 @@ const Cards = () => {
 
                 </Row>
 
-                <Button onClick={showSets}>Madness at the Darkmoon Faire</Button>
-                {/*filtering buttons can go here*/}
+                <Button onClick={showSets}>MTDF</Button>
 
                 <Row className="mt-3 mb-3 justify-content-center">
                     <Button id="classButton" style={{backgroundColor:'#5e3023', color:'white'}} size="sm" data-filter={2} onClick={handleClass}>Druid</Button>
