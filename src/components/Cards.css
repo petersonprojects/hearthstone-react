@@ -43,6 +43,22 @@ img{
     width:250px;
     image-rendering: -webkit-optimize-contrast;
     transition-duration: 0.4s;
+    /* filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5)); */
+}
+
+.bgImg {
+    height:90%;
+    width:75%;
+    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
+    image-rendering: -webkit-optimize-contrast;
+    transition-duration: 0.4s;
+}
+.bgImg:hover {
+    transition-duration: 0.5s;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translateZ(0) scale(1.1);
+    transform: translateZ(0) scale(1.1);
+    cursor: pointer;
 }
 
 img:hover{
@@ -143,6 +159,13 @@ opacity: 1;
 
     background-repeat: no-repeat;
     background-position: 0em;
+}
+
+.row{
+    padding-right: 0;
+    margin-right: 0;
+    padding-left: 0;
+    margin-left: 0;
 }
 
 

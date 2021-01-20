@@ -50,7 +50,6 @@ const Cards = () => {
         let neutral = reduxDeck.filter(card => card.classId === 12)
 
         classObj.mage.push(...mage)
-        console.log(classObj.mage)
         classObj.druid.push(...druid)
         classObj.hunter.push(...hunter)
         classObj.paladin.push(...paladin)
@@ -632,7 +631,7 @@ const Cards = () => {
 
                 </Row>
 
-                <Button onClick={showSets}>MTDF</Button>
+                {/* <Button onClick={showSets}>MTDF</Button> */}
 
                 <Row className="mt-3 mb-3 justify-content-center">
                     <Button id="classButton" style={{backgroundColor:'#5e3023', color:'white'}} size="sm" data-filter={2} onClick={handleClass}>Druid</Button>

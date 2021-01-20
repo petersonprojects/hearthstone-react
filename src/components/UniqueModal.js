@@ -4,7 +4,7 @@ import {Modal, Row, Col, Button} from 'react-bootstrap';
 const UniqueModal = ({singleCard, cardImage, bgc, setName, isOpen, closeModal, score, addToCollection, jsxModalHP}) => {
     return (
         <>
-            <Modal className="backgroundStyle" style={{fontFamily:'Belwe', backgroundImage:`url(${cardImage})`}} show={isOpen} onHide={closeModal}>
+            <Modal className="backgroundStyle" style={{fontFamily:'Belwe', backgroundImage:`url(${cardImage})`, backgroundColor:'transparent'}} show={isOpen} onHide={closeModal}>
 
             <Modal.Header>
             <Row className="justify-content-center">
