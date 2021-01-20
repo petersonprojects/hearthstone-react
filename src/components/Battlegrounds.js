@@ -3,6 +3,7 @@ import BGHero from './BGHero';
 import SingleCard from './SingleCard';
 import BGModal from './BGModal';
 import {Row} from 'react-bootstrap';
+import { gsap } from "gsap";
 
 class Battlegrounds extends Component {
 
@@ -122,12 +123,20 @@ class Battlegrounds extends Component {
         }, ()=> console.log(this.state.cards))
 
         // setTimeout to show the load for 3 seconds
-        setTimeout(()=> {
 
-            this.setState({
-                timedOut: true
-            })
-        }, 500)
+        // gsap.to(".box", {duration: 2, x: 300});
+        // gsap.to(".green", {duration: 3, rotation: 360, scale: 0.5});
+        // await gsap.to("#animo2", {duration: 4, x: 250,  ease: "circ.in"});
+        await gsap.to("#animo2", {duration: 2, scale: 1.4, rotation: 360});
+        await gsap.to("#fadeMe", {duration: 2, opacity: 1});
+    }
+
+    // gsap
+
+    componentDidUpdate = () => {
+
+
+
     }
 
     // jsx render
@@ -223,13 +232,15 @@ class Battlegrounds extends Component {
     }
 
     render() {
-        return this.state.timedOut === true ? (
+        // this.state.timedOut === true ? 
+        return (
             <>
+
                 <Row className="justify-content-center pt-4" style={{fontFamily:'Belwe'}}>
-                    <h1>Battlegrounds</h1>
+                    <img id="animo2" src="https://d2q63o9r0h0ohi.cloudfront.net/images/battlegrounds/logo_battlegrounds-682fab532a5376210193d82b52e1f14335679369c3921b53d1933930c2898a8145b84cebabd201cd741c7e69495047be16cb8e8e5b89c1850996b4702a7d3076.png" alt="hearthstone react battlegrounds"/>
                 </Row>
 
-                <Row className="justify-content-center">
+                <Row id="fadeMe" className="justify-content-center" style={{opacity: 0}}>
                     {this.loadView()}
                 </Row>
 
@@ -243,9 +254,10 @@ class Battlegrounds extends Component {
 
                 {this.generateUniqueModal()}
             </>
-        ): (<><div className="mt-3 mb-3">
-        <img style={{height:'200px', width:'200px'}} alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>
-    </div></>)
+        )
+    //     : (<><div className="mt-3 mb-3">
+    //     <img style={{height:'200px', width:'200px'}} alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>
+    // </div></>)
     }
 }
 
