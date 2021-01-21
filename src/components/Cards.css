@@ -49,7 +49,7 @@ img{
 .bgImg {
     height:90%;
     width:75%;
-    filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5));
+    /* filter: drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5)); */
     image-rendering: -webkit-optimize-contrast;
     transition-duration: 0.4s;
 }
@@ -71,11 +71,11 @@ img:hover{
 }
 
 .fade-in {
-    animation: fadeIn ease 1.8s;
-    -webkit-animation: fadeIn ease 1.8s;
-    -moz-animation: fadeIn ease 1.8s;
-    -o-animation: fadeIn ease 1.8s;
-    -ms-animation: fadeIn ease 1.8s;
+    animation: fadeIn ease 1.2s;
+    -webkit-animation: fadeIn ease 1.2s;
+    -moz-animation: fadeIn ease 1.2s;
+    -o-animation: fadeIn ease 1.2s;
+    -ms-animation: fadeIn ease 1.2s;
 }
     @keyframes fadeIn {
     0% {opacity:0;}
@@ -133,7 +133,7 @@ img:hover{
     -webkit-backface-visibility: hidden;
     -webkit-transform: translateZ(0) scale(1.05);
     transform: translateZ(0) scale(1.05);
-    -webkit-filter: blur(0);
+    /* -webkit-filter: blur(0); */
     cursor: pointer;
 }
 

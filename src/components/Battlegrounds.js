@@ -2,17 +2,26 @@ import React, { Component } from 'react';
 import BGHero from './BGHero';
 import SingleCard from './SingleCard';
 import BGModal from './BGModal';
-import {Row} from 'react-bootstrap';
+import {Row, Button, Col} from 'react-bootstrap';
 import { gsap } from "gsap";
+import {TweenMax, Linear, Power4} from "gsap"
+// import {Linear} from "gsap/Linear"
+
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+
 
 class Battlegrounds extends Component {
 
     constructor() {
         super()
 
+        gsap.registerPlugin(ScrollToPlugin);
+        // gsap.registerPlugin(Linear);
+
         // may need to make the key the card.slug so we can use e.target.id
         this.state = {
             cards:[],
+            isExpanded: false,
             heroes: [],
             heroesImages: [],
             isOpen: false,
@@ -71,7 +80,9 @@ class Battlegrounds extends Component {
                 "66196-yshaarj": 'https://d15f34w2p8l1cc.cloudfront.net/hearthstone/5029682643aff86094a4bdb8bf28d58849ba8b41f80035c8d0dd8239dc984927.png',
                 "59805-yogg-saron-hopes-end": 'https://d15f34w2p8l1cc.cloudfront.net/hearthstone/55c177f453599c029f4bc08d2aaf102717227475a5da99c53a60377a1f435eb6.png',
                 "60370-ysera": 'https://d15f34w2p8l1cc.cloudfront.net/hearthstone/af6ebcd94c714cd33bca25feb4ed84dc52b40b5e41fb4a9b0860b6ebb6ec31a9.png',
-                "64485-zephrys-the-great": 'https://d15f34w2p8l1cc.cloudfront.net/hearthstone/70b9ec266795ef030ea87da2a48479db6fad8a7fda548b0dad17b665d789a05d.png'
+                "64485-zephrys-the-great": 'https://d15f34w2p8l1cc.cloudfront.net/hearthstone/70b9ec266795ef030ea87da2a48479db6fad8a7fda548b0dad17b665d789a05d.png',
+                "67356-tickatus": "https://d15f34w2p8l1cc.cloudfront.net/hearthstone/235e56dba3de90dd33125615d66f7a8ee8da0707b841a1a316f01d63b3ccd8f7.png",
+                "67553-greybough" : "https://d15f34w2p8l1cc.cloudfront.net/hearthstone/d4dafbca3e8d0e27b33fc66d3c1779917c90db3e7e7fc64d89d5bc65c62e2583.png"
 
             }
         }
@@ -94,6 +105,19 @@ class Battlegrounds extends Component {
     componentDidMount = async () => {
 
         let token = await this.getToken()
+
+        var tween = TweenMax.to("#animo2", 1, {
+            rotation: 720,
+            ease: Linear.easeNone,
+            paused: true
+        });
+
+        await TweenMax.fromTo(
+            tween,
+            1,
+            { progress: 0 },
+            { progress: 1, ease: Power4.easeInOut }
+        );
 
         let cardsArr = [];
         
@@ -122,19 +146,17 @@ class Battlegrounds extends Component {
             heroesImages: heroImages
         }, ()=> console.log(this.state.cards))
 
-        // setTimeout to show the load for 3 seconds
 
-        // gsap.to(".box", {duration: 2, x: 300});
-        // gsap.to(".green", {duration: 3, rotation: 360, scale: 0.5});
-        // await gsap.to("#animo2", {duration: 4, x: 250,  ease: "circ.in"});
-        await gsap.to("#animo2", {duration: 2, scale: 1.4, rotation: 360});
-        await gsap.to("#fadeMe", {duration: 2, opacity: 1});
+
+        gsap.to("#fadeMe", {duration: 1.5, opacity: 1});
+        gsap.to(window, {duration: 1, scrollTo: 350, ease: Power4.easeInOut});
+        await gsap.to("#fadeMe2", {duration: 0.2, opacity: 1});
+        await gsap.to(".fancyLine9", {duration: 0.2, opacity: 1});
     }
 
     // gsap
 
     componentDidUpdate = () => {
-
 
 
     }
@@ -152,18 +174,65 @@ class Battlegrounds extends Component {
         return jsx;
     }
 
+    handleExpand = async (e) => {
+
+        // making this a toggle
+        console.log(e.pageY)
+        let temp = parseInt(e.pageY)
+        if(this.state.isExpanded === false)
+        {
+            this.setState({
+                isExpanded: true
+            })
+        }
+        else
+        {
+            this.setState({
+                isExpanded: false
+            })
+        }
+
+        let disNone = document.getElementById('fadeMe2');
+
+        await gsap.to("#fadeMe2", {duration: 1,innerHTML: `<img height="30" width="30" id="loadButton" alt="loading" src="https://www.jettools.com/images/animated_spinner.gif"/>`});
+        gsap.to(window, {duration: 0.8, scrollTo: temp - 125});
+        await gsap.to("#fadeMe2", {duration: 1, opacity: 0,  ease: Power4.easeInOut, pointerEvents:'none'});
+
+
+        // await gsap.to("");
+
+        // write a ternary for this
+
+    }
+
     loadMinions = () => {
         let jsx;
+
+        let hrJSX = <Col className="px-0 mb-5" xl={12}>
+            <hr className="fancyLine9" style={{opacity: 0}}/>
+        </Col>;
+
+        let ourReturn;
 
         let minions = this.state.cards.filter(card => {
             return card.battlegrounds.hero === false
         })
 
-        jsx = minions.map(minion => {
-            return <SingleCard triggerModal={this.triggerModal} key={minion.slug} card={minion}/>
-        })
+        if(this.state.isExpanded === true)
+        {
+            jsx = minions.map(minion => {
+                return <SingleCard triggerModal={this.triggerModal} key={minion.slug} card={minion}/>
+            })
+        }
 
-        return jsx;
+        else
+        {
+            jsx = null;
+        }
+
+        ourReturn = <>{hrJSX}{jsx}</>
+
+        return ourReturn;
     }
 
     // modal functions
@@ -181,10 +250,12 @@ class Battlegrounds extends Component {
     }
 
     triggerModal = (e) => {
+
         this.setState({
             cardID: e.target.id
         })
         this.openModal()
+
     }
 
     generateUniqueModal = () => {
@@ -237,18 +308,20 @@ class Battlegrounds extends Component {
             <>
 
                 <Row className="justify-content-center pt-4" style={{fontFamily:'Belwe'}}>
-                    <img id="animo2" src="https://d2q63o9r0h0ohi.cloudfront.net/images/battlegrounds/logo_battlegrounds-682fab532a5376210193d82b52e1f14335679369c3921b53d1933930c2898a8145b84cebabd201cd741c7e69495047be16cb8e8e5b89c1850996b4702a7d3076.png" alt="hearthstone react battlegrounds"/>
+                    <img className="imageNoHover" id="animo2" src="https://d2q63o9r0h0ohi.cloudfront.net/images/battlegrounds/logo_battlegrounds-682fab532a5376210193d82b52e1f14335679369c3921b53d1933930c2898a8145b84cebabd201cd741c7e69495047be16cb8e8e5b89c1850996b4702a7d3076.png" alt="hearthstone react battlegrounds"/>
                 </Row>
 
                 <Row id="fadeMe" className="justify-content-center" style={{opacity: 0}}>
                     {this.loadView()}
                 </Row>
 
-                <Row className="justify-content-center pt-4" style={{fontFamily:'Belwe'}}>
-                    <h1>Minions</h1>
+                <Row className="justify-content-center pt-4 pb-4" style={{fontFamily:'Belwe'}}>
+                    <Button id="fadeMe2" style={{opacity:0, backgroundColor: '#8a5a44'}} onClick={this.handleExpand}><span id="replace">Load Minions</span></Button>
+
                 </Row>
 
-                <Row className="justify-content-center">
+
+                <Row className="justify-content-center" >
                     {this.loadMinions()}
                 </Row>
 

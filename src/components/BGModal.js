@@ -59,12 +59,14 @@ const BGModal = ({singleCard, tier, isOpen, closeModal, heroPower}) => {
         "66196-yshaarj": 5,
         "59805-yogg-saron-hopes-end": 2,
         "60370-ysera": 5,
-        "64485-zephrys-the-great": 5
+        "64485-zephrys-the-great": 5,
+        "67356-tickatus": 4,
+        "67553-greybough": 4
     }
 
 
     let temp;
-    heroPower === null ? temp = null: temp = <img style={{filter: "drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5))"}} src={heroPower}/>;
+    heroPower === null ? temp = null: temp = <img className="fade-in" style={{width:'250px', height:'350px', cursor:'default', filter: "drop-shadow(-1px 6px 3px rgba(50, 50, 0, 0.5))"}} src={heroPower}/>;
 
     let temp2;
     heroPower === null ? temp2 = '0px': temp2 = '-25px';
@@ -74,12 +76,12 @@ const BGModal = ({singleCard, tier, isOpen, closeModal, heroPower}) => {
             <Modal  show={isOpen} onHide={closeModal} style={{fontFamily: 'Belwe'}}>
             <Row className="align-items-center justify-content-center backgroundStyle pt-3" style={{ width:'100%', borderTop:'20px'}}>
 
-                <img className="imageNoHover" style={{height:'300px', width: '250px', display:'inline-block'}} src={singleCard.battlegrounds.image} alt="bg_image"/>
+                <img className="fade-in imageNoHover" style={{height:'300px', width: '250px', display:'inline-block'}} src={singleCard.battlegrounds.image} alt="bg_image"/>
 
             </Row>
             
 
-            <Row className="align-items-center justify-content-center backgroundStyle name pb-1 px-4 text-center" style={{marginTop: temp2}}>
+            <Row className="align-items-center justify-content-center backgroundStyle name pb-1 px-4 text-center dropShadow" style={{marginTop: temp2}}>
                 {singleCard.name}
             </Row>
 
@@ -87,7 +89,7 @@ const BGModal = ({singleCard, tier, isOpen, closeModal, heroPower}) => {
                 <hr className="fancyLine9" />
             </Col>
 
-            <Col id="modalBod" className="d-flex justify-content-center backgroundStyle pb-2 imageNoHover" xl={12} >
+            <Col id="modalBod" className="d-flex justify-content-center backgroundStyle pb-2" xl={12} >
                 {temp}
             </Col>
 
@@ -95,9 +97,9 @@ const BGModal = ({singleCard, tier, isOpen, closeModal, heroPower}) => {
                 <hr className="fancyLine9" />
             </Col>
 
-            <Col className="d-flex justify-content-center align-items-center backgroundStyle pt-1 pb-3" xl={12} lg={12} md={12} sm={12} xs={12} style={{fontSize:'100px'}}>
-                <img style={{height:'75px', width:'75px'}} src="./images/score.png" alt="score"></img>
-                {customScores[singleCard.slug]}<span style={{fontSize:'20px'}}>/5</span>
+            <Col className="d-flex justify-content-center align-items-center backgroundStyle pt-1 pb-3 " xl={12} lg={12} md={12} sm={12} xs={12} style={{fontSize:'100px'}}>
+                <img className="imageNoHover" style={{height:'75px', width:'75px'}} src="./images/score.png" alt="score"></img>
+                <span className="dropShadow">{customScores[singleCard.slug]}</span><span style={{fontSize:'20px', textShadow: '1px 1px gray'}}>/5</span>
             </Col>
 
             </Modal>
