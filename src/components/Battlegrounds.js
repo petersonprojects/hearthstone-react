@@ -112,7 +112,7 @@ class Battlegrounds extends Component {
             paused: true
         });
 
-        await TweenMax.fromTo(
+        TweenMax.fromTo(
             tween,
             1,
             { progress: 0 },
